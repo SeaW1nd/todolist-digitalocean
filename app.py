@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, session, j
 import mysql.connector
 from flask_mail import Mail, Message
 from secrets import token_bytes
-from api.database import ToDoDatabase
+from database import ToDoDatabase
 import hashlib, os, datetime, threading, base64
 from authlib.integrations.flask_client import OAuth
 from authlib.common.security import generate_token
