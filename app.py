@@ -24,7 +24,7 @@ key = pyotp.random_base32()
 totp = pyotp.TOTP(key,digits=10,interval=600)
 
 tododb = ToDoDatabase()
-tododb.drop_database()
+#tododb.drop_database()
 tododb.create_table()
 
 # Testing data
