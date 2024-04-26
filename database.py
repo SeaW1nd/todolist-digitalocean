@@ -4,11 +4,11 @@ import uuid, hashlib, time
 class ToDoDatabase():
     def __init__(self):
         self.connection = mysql.connector.connect(
-            host='todolist-db-todolist-database.a.aivencloud.com',#todolist-db-todolist-database.a.aivencloud.com',
+            host='todolist-database-do-user-16128636-0.c.db.ondigitalocean.com',#todolist-db-todolist-database.a.aivencloud.com',
             user='todolist',
             password='Todolist<123456789',
             database='todolist',
-            port='21132'
+            port='25060'
             #21132
         )
         self.cursor = self.connection.cursor()
