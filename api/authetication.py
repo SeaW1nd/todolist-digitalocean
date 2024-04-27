@@ -186,7 +186,8 @@ def authorize():
     if Users.query.filter_by(external_id=user['sub']).first() is None:
         new_user = Users()
         new_user.google_user_signin(user['email'], user['name'], user['picture'], user['sub'])
-        session['user'] = Users.query.filter_by(external_id=user['sub']).first().user_id
+        print(new_user)
+        session['user'] = new_user.user_id
         session['type'] = 'google'
         session['token'] = token
         login_user(Users.query.filter_by(external_id=user['sub']).first())
