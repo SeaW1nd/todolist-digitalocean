@@ -39,10 +39,7 @@ policy = PasswordPolicy.from_names(strength=0.67)
 @login_required
 def profile(type):
     curr_user = Users.query.get(current_user.get_id())
-    if curr_user.isFillForm == False:
-        return render_template('profilePage.html', type=session['type'])
-    else:
-        return render_template('mainPage.html')
+    return render_template('profilePage.html', type=session['type'])
     
 
 @profiles.route('/profile/get',methods=['GET'])
