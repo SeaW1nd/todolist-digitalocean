@@ -183,12 +183,20 @@ def authorize():
     token = oauth.google.authorize_access_token()
     user = oauth.google.parse_id_token(token, nonce=session['nonce'])
     print("Google User: ", user)
-    Users.google_user_signin(user['email'], user['name'], user['picture'], user['sub'])
-    session['user'] = Users.query.filter_by(external_id=user['sub']).first().user_id
-    session['type'] = 'google'
-    session['token'] = token
-    login_user(Users.query.filter_by(external_id=user['sub']).first())
-    return redirect(url_for('todo.main_page')) 
+    if Users.query.filter_by(external_id=user['sub']).first() is None:
+        new_user = Users()
+        new_user.google_user_signin(user['email'], user['name'], user['picture'], user['sub'])
+        session['user'] = Users.query.filter_by(external_id=user['sub']).first().user_id
+        session['type'] = 'google'
+        session['token'] = token
+        login_user(Users.query.filter_by(external_id=user['sub']).first())
+        return redirect(url_for('todo.main_page'))
+    else:
+        session['user'] = Users.query.filter_by(external_id=user['sub']).first().user_id
+        session['type'] = 'google'
+        session['token'] = token
+        login_user(Users.query.filter_by(external_id=user['sub']).first())
+        return redirect(url_for('todo.main_page'))
 
     
 
