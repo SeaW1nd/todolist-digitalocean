@@ -184,7 +184,8 @@ def authorize():
     user = oauth.google.parse_id_token(token, nonce=session['nonce'])
     print("Google User: ", user)
     if Users.query.filter_by(external_id=user['sub']).first() is None:
-        new_user = Users(user_id=uuid.uuid4().hex,name=user['name'], email=user['email'], image=user['picture'], external_id=user['sub'])
+        new_password = Bcrypt().generate_password_hash('Demo@123').decode('utf-8')
+        new_user = Users(user_id=uuid.uuid4().hex,name=user['name'], email=user['email'], password= new_password , image=user['picture'], external_id=user['sub'])
         tododb.session.add(new_user)
         tododb.session.commit()
         print(new_user)
@@ -231,7 +232,8 @@ def facebook_auth():
             'https://graph.facebook.com/me?fields=id,name,email,picture{url}')
         user = resp.json()
         if Users.query.filter_by(external_id=user['id']).first() is None:
-            new_user = Users(user_id=uuid.uuid4().hex,name=user['name'], email=user['email'], image=user['picture']['data']['url'], external_id=user['id'])
+            new_password = Bcrypt().generate_password_hash('Demo@123').decode('utf-8')
+            new_user = Users(user_id=uuid.uuid4().hex,name=user['name'], email=user['email'], password=new_password, image=user['picture']['data']['url'], external_id=user['id'])
             tododb.session.add(new_user)
             tododb.session.commit()
             session['user'] = new_user.user_id
