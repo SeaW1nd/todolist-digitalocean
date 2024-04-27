@@ -113,7 +113,7 @@ def logout():
 @auth.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == "GET":
-        return render_template('forgotPassword.html')
+        return render_template('forgotPaswdPage.html')
     else:
         reset_email = request.form["email"]
         find_user = Users.query.filter_by(email=reset_email).first()
