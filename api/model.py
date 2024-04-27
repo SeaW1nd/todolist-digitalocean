@@ -22,23 +22,6 @@ class Users(tododb.Model, UserMixin):
     def get_id(self):
         return self.user_id
     
-    def google_user_signin(self, email, name, image, external_id):
-        self.user_id = uuid.uuid4().hex
-        self.email = email
-        self.name = name
-        self.image = image
-        self.external_id = external_id
-        self.type_account = 'google'
-        tododb.session.commit()
-
-    def facebook_user_signin(self, email, name, image, external_id):
-        self.user_id = uuid.uuid4().hex
-        self.email = email
-        self.name = name
-        self.image = image
-        self.external_id = external_id
-        self.type_account = 'facebook'
-        tododb.session.commit()
 
     
 class Groupss(tododb.Model):

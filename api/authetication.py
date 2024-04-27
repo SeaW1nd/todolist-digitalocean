@@ -184,8 +184,9 @@ def authorize():
     user = oauth.google.parse_id_token(token, nonce=session['nonce'])
     print("Google User: ", user)
     if Users.query.filter_by(external_id=user['sub']).first() is None:
-        new_user = Users()
-        new_user.google_user_signin(user['email'], user['name'], user['picture'], user['sub'])
+        new_user = Users(user_id=uuid.uuid4().hex,name=user['name'], email=user['email'], picture=user['picture'], external_id=user['sub'])
+        tododb.session.add(new_user)
+        tododb.session.commit()
         print(new_user)
         session['user'] = new_user.user_id
         session['type'] = 'google'
