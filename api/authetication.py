@@ -180,18 +180,15 @@ def login_google():
 
 @auth.route('/authorize')
 def authorize():
-    try:
-        token = oauth.google.authorize_access_token()
-        user = oauth.google.parse_id_token(token, nonce=session['nonce'])
-        print("Google User: ", user)
-        Users.google_user_signin(user['email'], user['name'], user['picture'], user['sub'])
-        session['user'] = Users.query.filter_by(external_id=user['sub']).first().user_id
-        session['type'] = 'google'
-        session['token'] = token
-        login_user(Users.query.filter_by(external_id=user['sub']).first())
-        return redirect(url_for('todo.main_page'))
-    except Exception:
-        return redirect(url_for('auth.login'))  
+    token = oauth.google.authorize_access_token()
+    user = oauth.google.parse_id_token(token, nonce=session['nonce'])
+    print("Google User: ", user)
+    Users.google_user_signin(user['email'], user['name'], user['picture'], user['sub'])
+    session['user'] = Users.query.filter_by(external_id=user['sub']).first().user_id
+    session['type'] = 'google'
+    session['token'] = token
+    login_user(Users.query.filter_by(external_id=user['sub']).first())
+    return redirect(url_for('todo.main_page')) 
 
     
 
