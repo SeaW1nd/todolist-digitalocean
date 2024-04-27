@@ -184,14 +184,14 @@ def authorize():
     user = oauth.google.parse_id_token(token, nonce=session['nonce'])
     print("Google User: ", user)
     if Users.query.filter_by(external_id=user['sub']).first() is None:
-        new_user = Users(user_id=uuid.uuid4().hex,name=user['name'], email=user['email'], picture=user['picture'], external_id=user['sub'])
+        new_user = Users(user_id=uuid.uuid4().hex,name=user['name'], email=user['email'], image=user['picture'], external_id=user['sub'])
         tododb.session.add(new_user)
         tododb.session.commit()
         print(new_user)
         session['user'] = new_user.user_id
         session['type'] = 'google'
         session['token'] = token
-        login_user(Users.query.filter_by(external_id=user['sub']).first())
+        login_user(new_user)
         return redirect(url_for('todo.main_page'))
     else:
         session['user'] = Users.query.filter_by(external_id=user['sub']).first().user_id
@@ -230,12 +230,21 @@ def facebook_auth():
         resp = oauth.facebook.get(
             'https://graph.facebook.com/me?fields=id,name,email,picture{url}')
         user = resp.json()
-        Users.facebook_user_signin(user['email'], user['name'], user['picture']['data']['url'], user['id'])
-        session['user'] = Users.query.filter_by(external_id=user['id']).first().user_id
-        session['type'] = 'facebook'
-        session['token'] = token
-        login_user(Users.query.filter_by(external_id=user['id']).first())
-        return redirect(url_for('todo.main_page'))
+        if Users.query.filter_by(external_id=user['id']).first() is None:
+            new_user = Users(user_id=uuid.uuid4().hex,name=user['name'], email=user['email'], image=user['picture']['data']['url'], external_id=user['id'])
+            tododb.session.add(new_user)
+            tododb.session.commit()
+            session['user'] = new_user.user_id
+            session['type'] = 'facebook'
+            session['token'] = token
+            login_user(new_user)
+            return redirect(url_for('todo.main_page'))
+        else:
+            session['user'] = Users.query.filter_by(external_id=user['id']).first().user_id
+            session['type'] = 'facebook'
+            session['token'] = token
+            login_user(Users.query.filter_by(external_id=user['id']).first())
+            return redirect(url_for('todo.main_page'))
     except Exception:
         return redirect(url_for('auth.login'))
 
