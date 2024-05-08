@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: a537d3c9c3fe
+Revision ID: 68fa396bb30d
 Revises: 
-Create Date: 2024-05-08 21:19:06.442009
+Create Date: 2024-05-09 00:03:20.481544
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = 'a537d3c9c3fe'
+revision = '68fa396bb30d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -189,9 +189,6 @@ def upgrade():
                existing_nullable=True)
 
     with op.batch_alter_table('trees', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('numberOfWaterUsed', sa.Integer(), nullable=True))
-        batch_op.add_column(sa.Column('numberOfFertilizerUsed', sa.Integer(), nullable=True))
-        batch_op.add_column(sa.Column('numberOfBirdHaveEliminated', sa.Integer(), nullable=True))
         batch_op.alter_column('tree_id',
                existing_type=mysql.VARCHAR(charset='utf8mb3', collation='utf8mb3_general_ci', length=40),
                type_=sa.NVARCHAR(length=40),
@@ -227,13 +224,11 @@ def upgrade():
         batch_op.alter_column('name',
                existing_type=mysql.VARCHAR(charset='utf8mb3', collation='utf8mb3_general_ci', length=256),
                type_=sa.NVARCHAR(length=256),
-               existing_nullable=True,
-               existing_server_default=sa.text("''"))
+               existing_nullable=True)
         batch_op.alter_column('bio',
                existing_type=mysql.VARCHAR(charset='utf8mb3', collation='utf8mb3_general_ci', length=2000),
                type_=sa.NVARCHAR(length=2000),
-               existing_nullable=True,
-               existing_server_default=sa.text("''"))
+               existing_nullable=True)
         batch_op.alter_column('country',
                existing_type=mysql.VARCHAR(charset='utf8mb3', collation='utf8mb3_general_ci', length=200),
                type_=sa.NVARCHAR(length=200),
@@ -284,13 +279,11 @@ def downgrade():
         batch_op.alter_column('bio',
                existing_type=sa.NVARCHAR(length=2000),
                type_=mysql.VARCHAR(charset='utf8mb3', collation='utf8mb3_general_ci', length=2000),
-               existing_nullable=True,
-               existing_server_default=sa.text("''"))
+               existing_nullable=True)
         batch_op.alter_column('name',
                existing_type=sa.NVARCHAR(length=256),
                type_=mysql.VARCHAR(charset='utf8mb3', collation='utf8mb3_general_ci', length=256),
-               existing_nullable=True,
-               existing_server_default=sa.text("''"))
+               existing_nullable=True)
         batch_op.alter_column('password',
                existing_type=sa.NVARCHAR(length=100),
                type_=mysql.VARCHAR(charset='utf8mb3', collation='utf8mb3_general_ci', length=100),
@@ -323,9 +316,6 @@ def downgrade():
                existing_type=sa.NVARCHAR(length=40),
                type_=mysql.VARCHAR(charset='utf8mb3', collation='utf8mb3_general_ci', length=40),
                existing_nullable=False)
-        batch_op.drop_column('numberOfBirdHaveEliminated')
-        batch_op.drop_column('numberOfFertilizerUsed')
-        batch_op.drop_column('numberOfWaterUsed')
 
     with op.batch_alter_table('teamtasks', schema=None) as batch_op:
         batch_op.alter_column('completed_user',
