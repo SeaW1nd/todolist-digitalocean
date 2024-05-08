@@ -1,4 +1,4 @@
-import { chadBot } from './chadBot.js';
+import { chadBot } from './chadbot.js';
 import { Utils } from './userData.js';
 import { chatBox } from './hmtlComponent.js';
 
