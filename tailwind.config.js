@@ -28,17 +28,22 @@ module.exports = {
         bg1: "url('/static/images/wallpaper.jpg')",
         bg2: "url('/static/images/wallpaper2.jpg')",
         bg3: "url('/static/images/wallpaper3.jpg')",
-        bg4: "url('/static/images/wallpaper3.jpg')",
+        bg4: "url('/static/images/wallpaper3.jpg')", //"url('https://source.unsplash.com/random/1920x1080?nature')",
+        bg5: "url('/static/images/wallpaper3.jpg')",
+        bg6: "url('/static/images/bg7.jpg')",
+        aiAvatar: "url('/static/images/gigachad.jpg')",
       },
       colors: {
         primary: {
-          100: "#b57250",
+          100: "#bc7f60",
           200: "#8cb9be",
         },
+        secondary: {"50":"#eff6ff","100":"#dbeafe","200":"#bfdbfe","300":"#93c5fd","400":"#60a5fa","500":"#3b82f6","600":"#2563eb","700":"#1d4ed8","800":"#1e40af","900":"#1e3a8a","950":"#172554"},
+
         accent: {
           100: "#eaa038",
           200: "#8cb9be",
-          300: "#c48e73",
+          300: "#d07141",
           400: "#6faeb4"
         },
         blue: {
@@ -75,7 +80,8 @@ module.exports = {
           900: "#302312",
         },
         main: "#fffcf7",
-        dark: "#4a4848",
+        dark: "#262626",
+        white: "#d8d8d8",
       },
     },
   },

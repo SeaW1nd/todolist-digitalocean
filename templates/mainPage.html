@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -12,14 +12,20 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Reddit+Mono:wght@200..900&display=swap"
         rel="stylesheet">
-
+    <title>Today</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../static/images/icons8-timer-50.png">
 </head>
 
-<body class="overflow-hidden bg-bg1 bg-cover bg-center">
+<body class="overflow-hidden bg-bg4 bg-cover bg-center *:transition-colors">
 
 
 
     <!--########################################################### Addons ######################################################################-->
+
+    <div id="Alert-Screen"
+        class="absolute flex z-40 flex-col justify-end  gap-1 items-end right-1 bottom-5 bg-transparent overflow-hidden">
+        <!--Alerts here-->
+    </div>
 
     <!-- Main modal  -->
     <div id="crud-modal" tabindex="-1" aria-hidden="true"
@@ -99,13 +105,17 @@
                                 class="bg-gray-50 border border-gray-300 p-1 h-[2.65rem]  w-20 rounded-lg focus:ring-primary-500 focus:border-primary-500 block dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                         </div>
 
+                        <div id="warn-sec" class="col-span-2">
+                            <div id="warn" class="block mb-2 text-sm font-medium text-red-400">Warning</div>
+                        </div>
+
                     </div>
                     <!-- Honeypot for Form Anti-spam, also holding task ID https://stackoverflow.com/questions/36227376/better-honeypot-implementation-form-anti-spam (TODO: Remove this link when production) -->
                     <input type="checkbox" name="contact_me_by_phone_number" id="task_" value="1" class="!hidden"
                         autocomplete="off" tabindex="-1">
                     <div class="col-span-2 flex justify-between">
-                        <button id="submit-sec" type="submit"
-                            class="text-white inline-flex items-center bg-primary-200 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-primary-200 dark:focus:ring-blue-800">
+                        <button id="submit-sec" type="button"
+                            class="text-white inline-flex items-center bg-green-500 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
                             <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
@@ -116,8 +126,8 @@
                         </button>
 
                         <!--Delete btn-->
-                        <button id="delete-sec"
-                            class="text-white inline-flex items-center bg-red-300 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-primary-200 dark:focus:ring-blue-800">
+                        <button id="delete-sec" type="button"
+                            class="text-white inline-flex items-center bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
                             <svg class="me-1 -ms-1 w-5 h-5 text-white dark:text-white" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                 viewBox="0 0 24 24">
@@ -137,17 +147,14 @@
 
 
 
-
     <!--########################################################### EoAddons ######################################################################-->
 
-
-
-
-    <div class="bg-main/25"> <!--Body Container-->
+    <div class="bg-main/25 dark:bg-gray-700/70"> <!--Body Container-->
         <!--Begin header-->
 
         <!--########################################################### NavBar ######################################################################-->
-        <div class="flex justify-between items-center shadow-xl py-0 pt-2 h-16 lg:h-18 lg:py-2 ">
+        <div id="NavBar"
+            class="flex justify-between items-center shadow-xl bg-white dark:bg-gray-700 py-0 pt-2 h-16 lg:h-18 lg:py-2 ">
             <div class="flex justify-evenly items-center gap-2 md:gap-8">
                 <!--button-->
                 <div id="Main-Menu-Click"
@@ -160,21 +167,23 @@
                 </div>
             </div>
 
-            <div id="clock" class="opacity-0 lg:opacity-100 text-xl text-center"></div>
+            <div id="clock" class="opacity-0 lg:opacity-100 text-xl text-center font-[Lato] dark:text-main"></div>
 
             <div class="flex justify-end items-center p-2 gap-2 ">
 
-                <div class="headbar-button p-1 border-0 hover:bg-main/35">
-                    <svg class="h-full w-full text-gray-800 dark:text-white" aria-hidden="true"
+                <div id="ChatBox-Toggle" class="headbar-button p-1 border-0 hover:bg-main/35">
+                    <svg class="w-full h-full text-gray-800 dark:text-white" aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                            d="M6 12h.01m6 0h.01m5.99 0h.01" />
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                            d="M7 9h5m3 0h2M7 12h2m3 0h5M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.616a1 1 0 0 0-.67.257l-2.88 2.592A.5.5 0 0 1 8 18.477V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" />
                     </svg>
+
                 </div>
 
                 <div id="Avatar-Menu-Click"
                     class="headbar-button p-1 border-2 rounded-full cursor-pointer hover:bg-main/35">
-                    <img id="Avatar-Image" class="w-full h-full rounded-full" src="/static/images/profile.jpg" alt="avtr">
+                    <img id="Avatar-Image" class="w-full h-full rounded-full" src="/static/images/profile.jpg"
+                        alt="avtr">
                 </div>
             </div>
         </div>
@@ -189,12 +198,15 @@
             class="dropdown-anim duration-300 z-10 absolute right-3 h-0 w-52 lg:w-60 overflow-hidden bg-main rounded-b-lg shadow-xl dark:bg-gray-700">
 
 
-            <a href="{{url_for('profile',type=session['type'])}}">
+            <a href="{{url_for('profiles.profile',type=session['type'])}}">
                 <div id="PMenu-Profile" class="PMenu-Primary-Section"> <!--block-->
                     <div class="flex items-center">
                         <div class="PMenu-Primary-Image-Wrapper">
                             <svg class="w-full h-full text-gray-800 dark:text-white" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-width="2"
                                     d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
@@ -204,7 +216,7 @@
                 </div>
             </a><!--eoblock-->
 
-            <div id="PMenu-UserSett" class="PMenu-Primary-Section"> <!--block-->
+            <div id="PMenu-UserSett" class="PMenu-Primary-Section hidden"> <!--block-->
                 <div class="flex items-center">
                     <div class="PMenu-Primary-Image-Wrapper">
                         <svg class="w-full h-full text-gray-800 dark:text-white" aria-hidden="true"
@@ -231,16 +243,17 @@
                     </div>
                     <div class="PMenu-Primary-Text">Dark mode</div>
                     <label class="inline-flex items-center cursor-pointer px-3">
-                        <input type="checkbox" value="" class="sr-only peer">
+                        <input id="Toggle-DarkMode" type="checkbox" value="" class="sr-only peer">
                         <div
-                            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-blue-500 peer-checked:bg-green-500">
                         </div>
                     </label>
                 </div>
-            </div><!--eoblock-->
+
+            </div>
 
             <div id="PMenu-Logout" class="PMenu-Primary-Section"> <!--block-->
-                <a href="{{url_for('logout')}}">
+                <a href="{{url_for('auth.logout')}}">
                     <button>
                         <div class="flex items-center">
                             <div class="PMenu-Primary-Image-Wrapper">
@@ -257,7 +270,14 @@
                     </button>
                 </a>
             </div><!--eoblock-->
-
+            <div id="PMenu-Coin" class="PMenu-Primary-Section"> <!--block-->
+                <div class="flex items-center">
+                    <div class="PMenu-Primary-Image-Wrapper">
+                        <img class="w-full h-full" src="../static/images/tree_game/JackpotCoin.png" class="" alt="coin">
+                    </div>
+                    <div id="PMenu-Display-Coin" class="PMenu-Primary-Text truncate">Coins: 999</div>
+                </div>
+            </div><!--eoblock-->
         </div>
         <!--########################################################### EoProfile Dropdown ######################################################################-->
 
@@ -267,10 +287,9 @@
 
         <!-- Dropdown Main menu -->
         <div id="Main-Menu"
-            class="dropdown-anim duration-300 h-0 z-10 absolute items-start w-54 lg:w-64 bg-main shadow-xl overflow-hidden  rounded-br-xl">
+            class="dropdown-anim duration-300 h-0 z-10 absolute items-start w-56 lg:w-64 bg-main dark:bg-gray-700 shadow-xl overflow-hidden  rounded-br-xl">
 
-
-            <div id="MMenu-Search" class="MMenu-Primary-Section mt-4"> <!--block-->
+            <div id="MMenu-Search" class="MMenu-Primary-Section mt-4">
                 <div class="flex items-center">
                     <div id="Begin-Search" class="MMenu-Primary-Image-Wrapper">
                         <svg class="w-6 lg:w-7 h-6 lg:h-7 text-gray-800 dark:text-white" aria-hidden="true"
@@ -282,11 +301,12 @@
 
                     <div class="p-2 flex items-center">
                         <textarea name="SearchBox" id="SearchBox"
-                            class="MMenu-Primary-Text bg-main rounded-xl border-0 text-left resize-none" rows="1"
-                            placeholder="Search"></textarea>
+                            class="MMenu-Primary-Text bg-main rounded-xl border-0 text-left resize-none w-full text-black" rows="1"
+                            placeholder="Search"  style="color: black;"></textarea>
                     </div>
                 </div>
-            </div><!--eoblock-->
+            </div>
+
             <div id="MMenu-Today" class="MMenu-Primary-Section"> <!--block-->
                 <div class="flex items-center">
                     <div class="MMenu-Primary-Image-Wrapper">
@@ -301,7 +321,9 @@
                     <div class="MMenu-Primary-Text">Today</div>
                 </div>
             </div><!--eoblock-->
-            <div id="MMenu-Calendar" class="MMenu-Primary-Section"> <!--block-->
+
+            <div id="MMenu-Calendar" class="MMenu-Primary-Section"
+                onclick="window.location.href=`{{url_for('calendar.calendar_page')}}`"> <!--block-->
                 <div class="flex items-center">
                     <div class="MMenu-Primary-Image-Wrapper">
                         <svg class="w-6 lg:w-7 h-6 lg:h-7 text-gray-800 dark:text-white" aria-hidden="true"
@@ -315,14 +337,33 @@
                     <div class="MMenu-Primary-Text">Calendar</div>
                 </div>
             </div><!--eoblock-->
-            <div id="MMenu-Garden" class="MMenu-Primary-Section "> <!--block-->
+
+            <div id="MMenu-Team" class="MMenu-Primary-Section"
+                onclick="window.location.href=`{{url_for('team.waiting_page')}}`"> <!--block-->
                 <div class="flex items-center">
                     <div class="MMenu-Primary-Image-Wrapper">
-                        <img class="w-6 lg:w-7 h-6 lg:h-7"
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAADG0lEQVR4nO2Zu09VQRCHP/BBAgYrQ2VE8f0oTIxG/SMsFQobWx+FoqKNFtpoIVhoNFqKFKBEjYmASKItliQa0T9BA0ZA4ZpJ5iSTzTl79jy49xb3Szb3FLOz8ztndnd2LzRoUHdsBl4DX4F5bd+AMaAPOECdcweopLR3wHHqlBPAcoCIFeAu0FKrQNcA+/Q3Lo12Am3auoAeYBBYcoR8UJuqslZzWgJ4lbFvJzDqiJgA1lOjPP+Z08clR8QtqsRB4J8ZuLeArz7jR3weogq8NYPKc1MBX03AG+PvBavMDl09ojcmEzWJ7cCsNnlOYpdZtZZTbAtzLcPbsrby7GPU2MrcKJ3DwKR5+9JOp/S5YWzl2ccZZ394X9Z8WAfcj9mY/gAdJQroUJ92DBnznsaQi43AlON0ERgOLAOyCEB9DsdsdPLl28lIi35G6+ilbkKhZBUQsTVmoxvPutENODl5kezkFRDR68y5fgI55uR80qpwW/NWHDevggDhsjMnjhLAhOnkq3Pmjd2TGBFlCEBTN/Ij9ZeX/eazLWlVGZJmcSLKErAF+GvSWWJM5LoZVErftDLggSPiqRFRlgBhKHRTjEpkad2k4xORJkBs+nUeyXzy0ROaRj+M4bYAAT4RNz0CmjXlKtpkPvnoMrbffYa/jWFroIAkEZ8TBLjBV3Q++Wg1thJjInPGcEMGAUkiXAFp8yaJdmP/K9EK+GIMpXTOStzbrWg65Q0+KrmjPjN4GDeGJ8lHnIiRAsGjC0rQJL5qDJ+RHwls2viaLRC88Nz0ld05kb1O5Rm6EsVhl9EiwXcCC6a/pJOXqQybmQ+7jPpKjiybmJTWQacvWwWeJR8jJQR/wfRfCS3mhMemoxzezxUUMJ0j+PPO9c3DrAeaT84bHKzigWbIGftjnpu7TTEiFnRFOAXsTrnTDBXQpr661fdiTPASSy7kSzxy5kSeNuDcFYX0WdG0KeXO9IjeIucVIP8HxN2HVhLapC4mpbMHuKK74YxzKsv7BebU15huUpJOdUGZB5qa0BBQaxpfoNZkuV6vS0L/4GjQgBryH6712TVA4aKcAAAAAElFTkSuQmCC">
-
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
+                        </svg>
                     </div>
+                    <div class="MMenu-Primary-Text">Team</div>
+                </div>
+            </div><!--eoblock-->
 
+            <div id="MMenu-Garden" class="MMenu-Primary-Section"
+                onclick="window.location.href=`{{url_for('game.treePage_init')}}`"> <!--block-->
+                <div class="flex items-center">
+                    <div class="MMenu-Primary-Image-Wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="w-6 lg:w-7 h-6 lg:h-7 text-gray-800 dark:text-white" aria-hidden="true"
+                            viewBox="0 0 512 512" width="24" height="24"
+                            fill="currentColor"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                            <path
+                                d="M272 96c-78.6 0-145.1 51.5-167.7 122.5c33.6-17 71.5-26.5 111.7-26.5h88c8.8 0 16 7.2 16 16s-7.2 16-16 16H288 216s0 0 0 0c-16.6 0-32.7 1.9-48.3 5.4c-25.9 5.9-49.9 16.4-71.4 30.7c0 0 0 0 0 0C38.3 298.8 0 364.9 0 440v16c0 13.3 10.7 24 24 24s24-10.7 24-24V440c0-48.7 20.7-92.5 53.8-123.2C121.6 392.3 190.3 448 272 448l1 0c132.1-.7 239-130.9 239-291.4c0-42.6-7.5-83.1-21.1-119.6c-2.6-6.9-12.7-6.6-16.2-.1C455.9 72.1 418.7 96 376 96L272 96z" />
+                        </svg>
+                    </div>
                     <div class="MMenu-Primary-Text">My Garden</div>
                 </div>
             </div><!--eoblock-->
@@ -341,36 +382,9 @@
                 </div>
             </div><!--eoblock-->
 
-            <div id="MMenu-Group-Section"
-                class="relative MMenu-Group-Section overflow-y-scroll py-5 h-1/2 bg-gray-300/35 ">
+            <div id="MMenu-Group-Section" class="relative MMenu-Group-Section overflow-y-scroll py-5 max-h-[95%] ">
                 <!--group here-->
             </div>
-            <div id="MMenu-Bottom" class="flex justify-between items-center p-2">
-                <div class="Log-out">
-                    <a href="{{url_for('logout')}}">
-                        <button>
-                            <svg class="w-6 lg:w-7 h-6 lg:h-7 text-gray-800 dark:text-white" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="1.5"
-                                    d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2" />
-                            </svg>
-                        </button>
-                    </a>
-                </div>
-                <div class="Settings">
-                    <svg class="w-6 lg:w-7 h-6 lg:h-7 text-gray-800 dark:text-white" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1Z" />
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                    </svg>
-                </div>
-            </div>
-
-
         </div>
         <!--End Dropdown menu-->
         <!--########################################################### EoDropdown Main Menu ######################################################################-->
@@ -404,267 +418,118 @@
 
 
 
-        <!--########################################################### Calendar ######################################################################-->
-        <!-- Redirect to Backend Generator here -->
-        <!-- Begin Calendar -->
-        <div id="test" class=""></div>
-        <div id="Calendar-Container" class=" hidden container">
-            <div class="left">
-                <div class="calendar">
-                    <div class="month">
-                        <i class="prev">&lt;</i>
-                        <div class="date">April 2024</div>
-                        <i class="next">&gt;</i>
-                    </div>
-                    <div class="weekdays bg-red-300">
-                        <div>Sun</div>
-                        <div>Mon</div>
-                        <div>Tue</div>
-                        <div>Wed</div>
-                        <div>Thu</div>
-                        <div>Fri</div>
-                        <div>Sat</div>
-                    </div>
-                    <div class="days"></div>
-                    <div class="goto-today">
-
-                        <button class="today-btn">Today</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="right">
-                <div class="tasks-display">
-                    <div class="today-date">
-                        <div class="day-and-date">
-                            <div class="event-day">Wed</div>
-                            <div class="event-date">7th April 2024</div>
-                        </div>
-
-                        <div class="events"></div>
-                    </div>
-                </div>
-                <div class="add-event-wrapper">
-                    <div class="add-event-header">
-                        <div class="title">Add Event</div>
-                        <i class="fas fa-times close"></i>
-                    </div>
-                    <div class="add-event-body">
-                        <div class="add-event-input">
-                            <input type="text" placeholder="Event Name" class="event-name" />
-                        </div>
-                        <div class="add-event-input">
-                            <input type="text" placeholder="Event Time From" class="event-time-from" />
-                        </div>
-                        <div class="add-event-input">
-                            <input type="text" placeholder="Event Time To" class="event-time-to" />
-                        </div>
-                        <div class="add-event-input">
-                            <input type="text" placeholder="Description" class="event-description" />
-                        </div>
-                    </div>
-                    <div class="add-event-footer">
-                        <button class="add-event-btn">Add Event</button>
-                    </div>
-                </div>
-            </div>
-            <button class="add-event">
-                <i class="">+</i>
-            </button>
-        </div>
-        <!-- End Calendar -->
-
-        <!--########################################################### EoCalendar ######################################################################-->
-
-
 
         <!--########################################################### Main Screen ######################################################################-->
-        <!--Begin Main screen-->
-        <div id="Main-Screen" class="Container backdrop-blur-sm py-10 h-[90vh] overflow-y-scroll overflow-x-hidden">
-            <!-- Dynamic draggable button here -->
 
-            <!--Formatter-->
+        <div id="Main-Section" class="flex">
+            <!--Begin Main screen-->
+            <div id="Main-Screen"
+                class="w-full inline-block backdrop-blur-sm py-10 h-[90vh] overflow-y-scroll overflow-x-hidden">
+                <!-- Dynamic draggable button here -->
+                <div id="Main-Formatter" class="relative w-full">
+                    <div id="Wrapper" class="relative flex flex-wrap justify-center items-center gap-8 py-10 lg:px-36">
+                        <!--Group-->
+                        <div class="group-outer">
+                            <div id="Task-Section-Outer"
+                                class="bg-main dark:bg-gray-500 animate-pulse pt-4 p-2 overflow-hidden shadow-xl hover:shadow-2xl rounded-xl ">
+                                <div id="Task-Section"
+                                    class="relative px-2 pb-9 flex flex-col gap-3 overflow-y-auto overflow-x-hidden rounded-xl w-72 h-72 lg:w-96 lg:h-96">
+                                    <!--task here-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group-outer">
+                            <div id="Task-Section-Outer"
+                                class="bg-main dark:bg-gray-500 animate-pulse pt-4 p-2 overflow-hidden shadow-xl hover:shadow-2xl rounded-xl ">
+                                <div id="Task-Section"
+                                    class="relative px-2 pb-9 flex flex-col gap-3 overflow-y-auto overflow-x-hidden rounded-xl w-72 h-72 lg:w-96 lg:h-96">
+                                    <!--task here-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group-outer">
+                            <div id="Task-Section-Outer"
+                                class="bg-main dark:bg-gray-500 animate-pulse pt-4 p-2 overflow-hidden shadow-xl hover:shadow-2xl rounded-xl ">
+                                <div id="Task-Section"
+                                    class="relative px-2 pb-9 flex flex-col gap-3 overflow-y-auto overflow-x-hidden rounded-xl w-72 h-72 lg:w-96 lg:h-96">
+                                    <!--task here-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group-outer">
+                            <div id="Task-Section-Outer"
+                                class="bg-main dark:bg-gray-500 animate-pulse pt-4 p-2 overflow-hidden shadow-xl hover:shadow-2xl rounded-xl ">
+                                <div id="Task-Section"
+                                    class="relative px-2 pb-9 flex flex-col gap-3 overflow-y-auto overflow-x-hidden rounded-xl w-72 h-72 lg:w-96 lg:h-96">
+                                    <!--task here-->
+                                </div>
+                            </div>
+                        </div>
+                        <!--Formatter-->
 
+                    </div>
+                </div>
+            </div>
+
+            <div id="Chat-Section"
+                class="hidden w-full md:w-4/12 h-[90vh] shadow-lg bg-main dark:bg-gray-500 flex flex-col overflow-hidden">
+                <div class="">
+
+                    <div id="chat-box-wrapper" class="chat-wrapper p-4 flex flex-col justify-center items-start">
+                        <div class="w-full flex items-center justify-between">
+                            <div class="px-2">
+                                <h1 class="text-lg font-semibold text-gray-800 dark:text-white">Chat</h1>
+                            </div>
+                            <div id="clear-chat-box"
+                                class="flex items-center justify-center px-2 rounded-lg hover:bg-gray-300">
+                                <svg class="w- h-8 text-red-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="1.5"
+                                        d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div id="chat-content"
+                            class="chat-text-sec shadow-md h-[70vh] p-4 mb-4 w-full mt-1 rounded-lg bg-gray-300/50 overflow-x-hidden overflow-y-scroll">
+                            <!--chat content-->
+
+
+                            <!--eochat content-->
+                        </div>
+
+                        <div class="chat-input-sec flex w-full justify-center items-center">
+                            <textarea id="chat-message"
+                                class="chat-input shadow-md rounded-s-lg border-2 resize-none dark:text-main border-main h-11 w-full lg:h-12 text-base bg-gray-300/50"
+                                placeholder="Type a message" rows="1"></textarea>
+                            <button id="chat-send-button" type="button"
+                                class="shadow-md chat-send-button border-2 border-main bg-green-500 h-11 w-11 lg:h-12 lg:w-12 rounded-e-lg flex justify-center items-center hover:bg-blue-600">
+
+                                <svg class="w-full h-full text-main rotate-90" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="1.5" d="m12 18-7 3 7-18 7 18-7-3Zm0 0v-5" />
+                                </svg>
+
+
+                            </button>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
         </div>
         <!--End Main screen-->
         <!--########################################################### EoMain Screen ######################################################################-->
 
 
-
-
-        <div class="Bottom-Bar w-full bottom-0 bg-accent-200 flex justify-between m-0">
-            <div class=""></div>
-        </div>
-
-
-
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <script src="../static/js/app.js"></script>
-        <script src="../static/js/calendar.js"></script>
-        <script>
-
-            function dragMoveListener(event) {
-                var target = event.target
-                // keep the dragged position in the data-x/data-y attributes
-                var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-                var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
-
-                // translate the element
-                target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
-
-                // update the posiion attributes
-                target.setAttribute('data-x', x)
-                target.setAttribute('data-y', y)
-            }
-            // set the modal menu element
-            const $targetEl = document.getElementById('crud-modal');
-
-            // options with default values
-            const options = {
-                // placement: 'bottom-right',
-                backdrop: 'dynamic',
-                backdropClasses:
-                    'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
-                closable: true,
-                onHide: () => {
-                    $('#crud-modal h3').text("Create");
-                    $('#crud-modal h3').show();
-
-                    $('#crud-modal label[for="name"]').text("Name");
-                    $('#crud-modal #name').attr("placeholder", "Name");
-                    $('#crud-modal #name').val("");
-                    $('#crud-modal #name-sec').show();
-
-                    $('#crud-modal label[for="description"]').text("Description");
-                    $('#crud-modal #description').val("");
-                    $('#crud-modal #description').attr("placeholder", "Description");
-                    $('#crud-modal #desc-sec').show();
-
-                    $('#crud-modal label[for="todo-expired"]').text("Deadline");
-                    $('#crud-modal #todo-expired').val("");
-                    $('#crud-modal #todo-expired-sec').show();
-
-                    $('#crud-modal label[for="tags"]').text("Tag");
-                    $('#crud-modal #tags option').removeAttr("selected");
-                    $('#crud-modal #tags-sec').show();
-
-                    $('#crud-modal label[for="groups"]').text("Group");
-                    $('#crud-modal #groups option').removeAttr("selected");
-                    $('#crud-modal #groups-sec').hide();
-
-                    $('#crud-modal label[for="colors"]').text("Color");
-                    $('#crud-modal #colors').val("#" + ((Math.random() * 0xF0F0F0 << 0).toString(16).padStart(6, '0')));
-                    $('#crud-modal #colors-sec').show();
-
-
-                    $('#crud-modal button[type="submit"]').html(`
-                        <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                        Create`);
-                    $('#crud-modal #submit-sec').show();
-
-                    $('#crud-modal #delete-sec button').html(`
-                    <svg class="me-1 -ms-1 w-5 h-5 text-white dark:text-white" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                            </svg>
-
-                            Delete
-
-                    `);
-                    $('#crud-modal #delete-sec').hide();
-
-                    $('#crud-modal input[type="checkbox"]').attr("id", `task_`);
-                    console.log("Reset modal complete!")
-
-                    console.log('modal is hidden');
-                },
-                onShow: () => {
-                    // Limit the date picker to today and future dates
-                    // Get the current date and time
-                    const now = new Date();
-
-                    // Format the date and time as required by the min attribute
-                    const year = now.getFullYear();
-                    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed, so we add 1
-                    const day = String(now.getDate()).padStart(2, '0');
-                    const hour = String(now.getHours()).padStart(2, '0');
-                    const minute = String(now.getMinutes()).padStart(2, '0');
-
-                    // Construct the string for the min attribute
-                    const minDatetime = `${year}-${month}-${day}T${hour}:${minute}`;
-
-                    // Set the min attribute of the input element
-                    document.getElementById('todo-expired').setAttribute('min', minDatetime);
-                    // Set value to current date and time
-                    document.getElementById('todo-expired').value = minDatetime;
-
-                    console.log('modal is shown');
-                },
-                onToggle: () => {
-                    console.log('modal has been toggled');
-                },
-            };
-
-            // If screen is small, change option backdrop to static
-            if (window.innerWidth < 768) {
-                options.backdrop = 'static';
-            }
-
-            // instance options object
-            const modal = new Modal($targetEl, options);
-            const addGroupnTagModal = new Modal($targetEl, options);
-
-            $(document).ready(function () {
-                // target elements with the "draggable" class
-                interact('#add-draggable')
-                    .draggable({
-                        // enable inertial throwing
-                        inertia: true,
-                        // keep the element within the area of it's parent
-                        modifiers: [
-                            interact.modifiers.restrict({
-                                restriction: "#Main-Screen",
-                                elementRect: { top: 0, left: 0, bottom: 0.1, right: 0.1 },
-                                endOnly: true
-                            })
-                        ],
-                        // disable autoScroll
-                        autoScroll: false,
-
-                        listeners: {
-                            // call this function on every dragmove event
-                            move: dragMoveListener,
-                        }
-                    })
-                    .on('tap', function (event) {
-                        event.preventDefault();
-                        //resetModalState();
-                        // Clean modal first
-                        $('#crud-modal #colors-sec').hide();
-                        $('#crud-modal label[for="name"]').text("Title");
-                        $('#crud-modal label[for="description"]').text("Task Description");
-
-                        $('#crud-modal h3').text("Create Task");
-                        $('#crud-modal #name').val("");
-                        $('#crud-modal #description').val("");
-                        $('#crud-modal #tags option').removeAttr("selected");
-                        $('#crud-modal #todo-expired').val("");
-                        $('#crud-modal button[type="submit"]').html(`
-                        <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                        Create`);
-                        $('#crud-modal input[type="checkbox"]').attr("id", `task_`);
-
-                        // Show modal
-                        modal.show();
-
-                    })
-            });
-
-        </script>
+        <script src="../static/js/app.js" type="module"></script>
+        <script src="../static/js/fuzzySearchLib.js"></script>
 </body>
 
 </html>

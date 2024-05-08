@@ -7,3 +7,8 @@ password_strength==0.0.3.post2
 gunicorn
 pyotp
 requests
+Flask-Migrate
+PyMySQL
+flask-Login
+flask-bcrypt
+Flask-SocketIO
