@@ -483,9 +483,9 @@ $(document).ready(function () {
         let g = Dict.createGroup(title, [], null, color, "", null);
         let dft = Dict.tags[g.def_tag]
         console.log(dft);
-        $("#MMenu-Group-Section").append(MainMenu.GroupTemplates(g.groupID, g));
+       // $("#MMenu-Group-Section").append(MainMenu.GroupTemplates(g.groupID, g));
         /// Main Screen Add 
-        renderGroupMainScreen($("#Main-Formatter").find("#Wrapper"), g, currentMode);
+       // renderGroupMainScreen($("#Main-Formatter").find("#Wrapper"), g, currentMode);
         $.when(
           ajaxHandler.team_addGroup(team_id, g.groupID, g.title, g.color, g.def_tag)).done( // add Group
             ajaxHandler.team_addTag(team_id, dft.tagID, dft.groupId, dft.title, dft.color) // add def_tag
@@ -495,7 +495,7 @@ $(document).ready(function () {
         let g_old = Dict.groups[id];
         let g_new = Dict.createGroup(title, g_old.tags, g_old.def_tag, color, "", id);
         Dict.updateGroup(g_new.groupID, g_new);
-        $("#MMenu-Group-Section").find("#" + g_new.groupID).find("#MMenu-Group-Title").text(g_new.title);
+       // $("#MMenu-Group-Section").find("#" + g_new.groupID).find("#MMenu-Group-Title").text(g_new.title);
         $.when(ajaxHandler.team_updateGroup(team_id, g_new.groupID, g_new.title, g_new.color, g_new.def_tag)).done(() => { RefreshAll(team_id); Alert.Success("Group updated successfully"); });
       }
     }
@@ -505,14 +505,14 @@ $(document).ready(function () {
       if (id == "none") {  /// Create a new tags
         let t = Dict.createTag(title, color, groupId, true, true, true);
         Dict.groups[groupId].tags.push(t.tagID);
-        addNewTagMainMenu($("#" + groupId).find("#MMenu-Tag-Section"), t.tagID, t);
+      //  addNewTagMainMenu($("#" + groupId).find("#MMenu-Tag-Section"), t.tagID, t);
         $.when(ajaxHandler.team_addTag(team_id, t.tagID, t.groupId, t.title, t.color)).done(() => { RefreshAll(team_id); Alert.Success("Tag added successfully"); });
       }
       else { //Edit tags     
         let t_old = Dict.tags[id];
         let t_new = Dict.createTag(title, color, groupId, t_old.deletable, t_old.editable, t_old.display, id);
         Dict.updateTag(t_new.tagID, t_new);
-        $("#MMenu-Group-Section").find("#" + id).find("#MMenu-Tag-Title").text(t_new.title);
+      //  $("#MMenu-Group-Section").find("#" + id).find("#MMenu-Tag-Title").text(t_new.title);
 
         $.when(ajaxHandler.team_updateTag(team_id, t_new.tagID, t_new.groupId, t_new.title, t_new.color)).done(() => { RefreshAll(team_id); Alert.Success("Tag updated successfully"); });
 
