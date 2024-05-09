@@ -433,10 +433,12 @@ $(document).ready(function () {
 
   $("#MMenu-Group-Section").on("click", ".MMenu-Group", function () {
     var id = $(this).attr("id"); // Get the ID of the clicked element
-    $("html, body").animate({
-      scrollTop: $("#Main-Screen #" + id)[0].offset().top // Scroll to the top position of the element with the corresponding ID
-  }, 800); // Adjust the duration for smooth scrolling
-  });
+    var targetOffset = $("#Main-Screen #" + id).offset().top;
+    $("#Main-Screen").animate({
+        scrollTop: targetOffset
+    }, 'slow');
+});
+
 
   /// Add tag
   $("#MMenu-Group-Section").on("click", ".MMenu-Tag-Add", function () {
