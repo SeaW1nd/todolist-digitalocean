@@ -2791,6 +2791,10 @@ input:checked + .toggle-bg {
   max-width: 20rem;
 }
 
+.max-w-9xl {
+  max-width: 1920px;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -5330,6 +5334,10 @@ input:checked + .toggle-bg {
     max-width: 36rem;
   }
 
+  .md\:max-w-5xl {
+    max-width: 64rem;
+  }
+
   .md\:scale-150 {
     --tw-scale-x: 1.5;
     --tw-scale-y: 1.5;
@@ -5581,6 +5589,10 @@ input:checked + .toggle-bg {
     width: 100%;
   }
 
+  .lg\:w-\[100\] {
+    width: 100;
+  }
+
   .lg\:max-w-7xl {
     max-width: 80rem;
   }
@@ -5591,6 +5603,10 @@ input:checked + .toggle-bg {
 
   .lg\:max-w-screen-xl {
     max-width: 1000px;
+  }
+
+  .lg\:max-w-9xl {
+    max-width: 1920px;
   }
 
   .lg\:grid-flow-row {
