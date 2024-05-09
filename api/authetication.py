@@ -167,10 +167,10 @@ def reset_password(token):
 
 @auth.route('/google_login')
 def login_google():
-    GOOGLE_CLIENT_ID = "1002415781087-3dcgjtloj7l1slkoltrojkfffjldvr98.apps.googleusercontent.com"
+    GOOGLE_CLIENT_ID = "1002415781087-d1a74175n9vk48ehrir794qghma573qi.apps.googleusercontent.com"
     #os.getenv("OAUTH2_CLIENT_ID")
     #OAUTH2_CLIENT_ID=1002415781087-d1a74175n9vk48ehrir794qghma573qi.apps.googleusercontent.com
-    GOOGLE_CLIENT_SECRET = "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"
+    GOOGLE_CLIENT_SECRET = "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"
     #os.getenv("OAUTH2_CLIENT_SECRET")
     #OAUTH2_CLIENT_SECRET=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
     CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
