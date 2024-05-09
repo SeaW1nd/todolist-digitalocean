@@ -256,6 +256,7 @@ def facebook_auth():
             session['token'] = token
             login_user(Users.query.filter_by(external_id=user['id']).first())
             return redirect(url_for('todo.main_page'))
-    except Exception:
+    except Exception as e:
+        print(e)
         return redirect(url_for('auth.login'))
 
