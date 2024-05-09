@@ -22,6 +22,9 @@ def loadTree():
         new_tree = Trees(user_id=curr_user.user_id, tree_id = uuid.uuid4().hex, treeStage=0, treeCount=0, wateringsLeft=0, fertilizationsLeft=0, autoOption=False, audioOption=True)
         tododb.session.add(new_tree)
         tododb.session.commit()
+        if curr_user.points is None:
+            curr_user.points = 0
+            tododb.session.commit()
         json_tree = {
             'tree_id': new_tree.tree_id,
             'treeStage': new_tree.treeStage,
@@ -37,6 +40,9 @@ def loadTree():
         }
         return jsonify(json_tree), 200
     else:
+        if curr_user.points is None:
+            curr_user.points = 0
+            tododb.session.commit()
         json_tree = {
             'tree_id': tree.tree_id,
             'treeStage': tree.treeStage,
