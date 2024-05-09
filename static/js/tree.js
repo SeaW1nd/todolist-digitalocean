@@ -122,7 +122,10 @@ function sendData() {
     fertilizationsLeft: fertilizationsLeft,
     autoOption: autoOption,
     audioOption: audioOption,
-    coins: coins
+    coins: coins,
+    numberOfBirdHaveEliminated: numberOfBirdHaveEliminated,
+    numberOfWaterUsed: numberOfWaterUsed,
+    numberOfFertilizerUsed: numberOfFertilizerUsed
   };
   fetch('/tree/update', {
     method: 'POST',
