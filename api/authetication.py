@@ -18,8 +18,8 @@ policy = PasswordPolicy.from_names(strength=0.67)
 key = pyotp.random_base32()
 totp = pyotp.TOTP(key,digits=10,interval=600)
 
-SECRET_KEY = token_bytes(16).hex()
-secure_password_salt = token_bytes(16).hex()
+SECRET_KEY = "SUPERSECRETKEY"
+secure_password_salt = "SUPERSECRETKEY"
 oauth = OAuth()
 #Mail config
 mail = Mail()
