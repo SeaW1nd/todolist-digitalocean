@@ -14,6 +14,9 @@ module.exports = {
       xl: "1000px",
     },
     extend: {
+      maxWidth: {
+        "9xl": "1920px",
+      },
       height: {
         "50%": "50%",
         "100%": "100%",

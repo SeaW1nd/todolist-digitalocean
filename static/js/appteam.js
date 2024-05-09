@@ -118,7 +118,6 @@ function RefreshAll(team_id) {
     $("#Main-Screen").empty();
     $("#MMenu-Group-Section").empty();
     $("#PMenu-Display-Coin").text("Coins: " + Dict.points);
-
     LoadMainMenu(Dict);
     LoadMainScreen(Dict, currentMode);
     refreshUserList();
@@ -497,14 +496,14 @@ $(document).ready(function () {
         $.when(
           ajaxHandler.team_addGroup(team_id, g.groupID, g.title, g.color, g.def_tag)).done( // add Group
             ajaxHandler.team_addTag(team_id, dft.tagID, dft.groupId, dft.title, dft.color) // add def_tag
-          ).done(() => { RefreshAll(team_id); Alert.Success("Group added successfully"); }).fail(() => { RefreshAll(team_id); Alert.Danger("Only team leader can create group!") });
+          ).done(() => { RefreshAll(team_id); Alert.Success("Group added successfully"); }).fail(() => { Alert.Danger("Only team leader can create group!") });
       }
       else { // Edit groups
         let g_old = Dict.groups[id];
         let g_new = Dict.createGroup(title, g_old.tags, g_old.def_tag, color, "", id);
         Dict.updateGroup(g_new.groupID, g_new);
        // $("#MMenu-Group-Section").find("#" + g_new.groupID).find("#MMenu-Group-Title").text(g_new.title);
-        $.when(ajaxHandler.team_updateGroup(team_id, g_new.groupID, g_new.title, g_new.color, g_new.def_tag)).done(() => { RefreshAll(team_id); Alert.Success("Group updated successfully"); }).fail(() => { RefreshAll(team_id); Alert.Danger("Only team leader can update group!") });
+        $.when(ajaxHandler.team_updateGroup(team_id, g_new.groupID, g_new.title, g_new.color, g_new.def_tag)).done(() => { RefreshAll(team_id); Alert.Success("Group updated successfully"); }).fail(() => { Alert.Danger("Only team leader can update group!") });
       }
     }
 
@@ -514,7 +513,7 @@ $(document).ready(function () {
         let t = Dict.createTag(title, color, groupId, true, true, true);
         Dict.groups[groupId].tags.push(t.tagID);
       //  addNewTagMainMenu($("#" + groupId).find("#MMenu-Tag-Section"), t.tagID, t);
-        $.when(ajaxHandler.team_addTag(team_id, t.tagID, t.groupId, t.title, t.color)).done(() => { RefreshAll(team_id); Alert.Success("Tag added successfully"); }).fail(() => { RefreshAll(team_id); Alert.Danger("Only team leader can create tag!") });
+        $.when(ajaxHandler.team_addTag(team_id, t.tagID, t.groupId, t.title, t.color)).done(() => { RefreshAll(team_id); Alert.Success("Tag added successfully"); }).fail(() => { Alert.Danger("Only team leader can create tag!") });
       }
       else { //Edit tags     
         let t_old = Dict.tags[id];
@@ -522,7 +521,7 @@ $(document).ready(function () {
         Dict.updateTag(t_new.tagID, t_new);
       //  $("#MMenu-Group-Section").find("#" + id).find("#MMenu-Tag-Title").text(t_new.title);
 
-        $.when(ajaxHandler.team_updateTag(team_id, t_new.tagID, t_new.groupId, t_new.title, t_new.color)).done(() => { RefreshAll(team_id); Alert.Success("Tag updated successfully"); }).fail(() => { RefreshAll(team_id); Alert.Danger("Only team leader can update tag!") });
+        $.when(ajaxHandler.team_updateTag(team_id, t_new.tagID, t_new.groupId, t_new.title, t_new.color)).done(() => { RefreshAll(team_id); Alert.Success("Tag updated successfully"); }).fail(() => { Alert.Danger("Only team leader can update tag!") });
 
       }
     }
@@ -545,21 +544,21 @@ $(document).ready(function () {
         // Deleting task
         Dict.removeTask(id);
         // Call ajaxHandler. at /todo/delete with JSON data
-        $.when(ajaxHandler.team_deleteTask(team_id, id)).done(() => { RefreshAll(team_id); Alert.Success("Task deleted successfully"); }).fail(() => { RefreshAll(team_id); Alert.Danger("Only team leader can delete task!") });
+        $.when(ajaxHandler.team_deleteTask(team_id, id)).done(() => { RefreshAll(team_id); Alert.Success("Task deleted successfully"); }).fail(() => { Alert.Danger("Only team leader can delete task!") });
       }
     }
 
     if (mode == "group") {
       if (id != "none") {  /// Delete a new group
         Dict.removeGroup(id);
-        $.when(ajaxHandler.team_deleteGroup(team_id, id)).done(() => { RefreshAll(team_id); Alert.Success("Group deleted successfully"); }).fail(() => { RefreshAll(team_id); Alert.Danger("Only team leader can delete group!") });
+        $.when(ajaxHandler.team_deleteGroup(team_id, id)).done(() => { RefreshAll(team_id); Alert.Success("Group deleted successfully"); }).fail(() => { Alert.Danger("Only team leader can delete group!") });
       }
     }
 
     if (mode == "tag") {   ///  Delete a tag
       if (id != "none") {
         Dict.removeTag(id);
-        $.when(ajaxHandler.team_deleteTag(team_id, id)).done(() => { RefreshAll(team_id); Alert.Success("Tag deleted successfully"); }).fail(() => { RefreshAll(team_id); Alert.Danger("Only team leader can delete tag!") });
+        $.when(ajaxHandler.team_deleteTag(team_id, id)).done(() => { RefreshAll(team_id); Alert.Success("Tag deleted successfully"); }).fail(() => { Alert.Danger("Only team leader can delete tag!") });
       }
     }
 
