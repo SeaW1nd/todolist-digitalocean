@@ -323,7 +323,7 @@ $(document).ready(function () {
         $("#CreateAndJoinTeam #teamlist").hide();
         $("#CreateAndJoinTeam #teamlist2").hide();
     });
-    // don't using not working now
+    // don't using not working 
     /*
      function t_join(){
         let searchCode = $("#code-sec #teamcode").val();
@@ -337,6 +337,7 @@ $(document).ready(function () {
         return teamId, teamname, teamdes;
     }
      */
+    // Join teamn 
     $("#crud-modal2 #Join-sec").click(function () {
         let team_code = $("#code-sec #teamcode").val();
         addteam(team_code);
@@ -349,6 +350,7 @@ $(document).ready(function () {
         teamlist1();
         // location.reload();
     });
+    // create team
     $("#crud-modal2 #Create-sec").click(function () {
         let teamname = $("#teamname-sec #teamname").val();
         let teamdes = $("#teamdesc-sec #teamdescription").val();
@@ -368,6 +370,7 @@ $(document).ready(function () {
         teamlist1();
         // location.reload();
     });
+    // edit team just for create team list cause of team create's user is admin 
     $("#CreateAndJoinTeam #teamlist2").on("click", ".editteam", function () {
         let teamid = $(this).closest(".team_createlist").attr("id");
         console.log("ahhhha :", teamid);
@@ -380,6 +383,7 @@ $(document).ready(function () {
 
 
     });
+    // save edit team and update to server
     $("#crud-modal2 #save-sec").click(function () {
         let id = $('#crud-modal2 input[type="checkbox"]').attr("id");
         console.log("Id: ", id);
@@ -397,7 +401,7 @@ $(document).ready(function () {
         teamlist1();
 
     });
-    // 
+    // delete inform in modal ( nothing else )
     $("#crud-modal2 #delete-sec").click(function () {
         let id = $('#crud-modal2 input[type="checkbox"]').attr("id");
         $('#teamname-sec #teamname').val("");

@@ -181,7 +181,7 @@ $(document).ready(function () {
 
 //// Refresh fuction 
 
-document.body.addEventListener('click', sendData);
+//document.body.addEventListener('click', sendData);
 
 function updateCoinsDisplay() {
   document.getElementById('CoinsOwnNumber').innerText = coins;
@@ -264,6 +264,7 @@ function waterTree() {
     // Play watering audio
     var fertilizingAudio = document.getElementById("wateringAudio");
     fertilizingAudio.play();
+    sendData();
   }
 }
 
@@ -285,6 +286,7 @@ function fertilizeTree() {
     // Play watering audio
     var fertilizingAudio = document.getElementById("fertilizingAudio");
     fertilizingAudio.play();
+    sendData();
   }
 }
 
@@ -358,6 +360,7 @@ function updateTree(load = false) {
       "treeCount"
     ).innerText = `${numberOfTreePlanted}`; // Update tree count
     updateTree();
+    sendData();
   }
 }
 
