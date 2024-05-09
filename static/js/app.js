@@ -10,12 +10,16 @@ This file handle:
 */
 //=====================================================================\\
 
-// Templates 
+// Templates
 import { MainMenu, MainScreen, chatBox } from "./hmtlComponent.js";
 import { Utils } from "./userData.js";
 import { modalMainScreen } from "./CRUDmodal_handler.js";
 import { ajaxHandler } from "./ajaxHandler.js";
-import { LoadMainMenu, toggleHiddenMMenuGroup, addNewTagMainMenu } from "./mainMenuRenderer.js";
+import {
+  LoadMainMenu,
+  toggleHiddenMMenuGroup,
+  addNewTagMainMenu,
+} from "./mainMenuRenderer.js";
 import { LoadMainScreen, renderGroupMainScreen } from "./mainScreenRenderer.js";
 import { Alert } from "./alertMsg.js";
 import { chadBot } from "./chadbot.js";
@@ -42,10 +46,38 @@ function getData() {
         let g3 = Dict.createGroup("Group 3", [], "green", "");
         console.log(g3);
         // Create a new Tag
-        let tag1 = Dict.createTag("Tag 1", "red", g1.groupID, false, true, true);
-        let tag2 = Dict.createTag("Tag 2", "blue", g2.groupID, false, true, true);
-        let tag3 = Dict.createTag("Tag 3", "green", g3.groupID, false, true, true);
-        let tag4 = Dict.createTag("Tag 4", "yellow", g1.groupID, false, true, true);
+        let tag1 = Dict.createTag(
+          "Tag 1",
+          "red",
+          g1.groupID,
+          false,
+          true,
+          true
+        );
+        let tag2 = Dict.createTag(
+          "Tag 2",
+          "blue",
+          g2.groupID,
+          false,
+          true,
+          true
+        );
+        let tag3 = Dict.createTag(
+          "Tag 3",
+          "green",
+          g3.groupID,
+          false,
+          true,
+          true
+        );
+        let tag4 = Dict.createTag(
+          "Tag 4",
+          "yellow",
+          g1.groupID,
+          false,
+          true,
+          true
+        );
         console.log(tag4);
 
         g1.tags.push(tag1.tagID);
@@ -54,16 +86,33 @@ function getData() {
         g3.tags.push(tag3.tagID);
 
         // Create a new Task
-        let t1 = Dict.createTask("Task 1", "Description 1", tag1.tagID, "2023-12-12", 10);
-        let t2 = Dict.createTask("Task 2", "Description 2", tag2.tagID, "2024-12-12", 10);
-        let t3 = Dict.createTask("Task 3", "Description 3", tag3.tagID, "2025-12-12", 10);
+        let t1 = Dict.createTask(
+          "Task 1",
+          "Description 1",
+          tag1.tagID,
+          "2023-12-12",
+          10
+        );
+        let t2 = Dict.createTask(
+          "Task 2",
+          "Description 2",
+          tag2.tagID,
+          "2024-12-12",
+          10
+        );
+        let t3 = Dict.createTask(
+          "Task 3",
+          "Description 3",
+          tag3.tagID,
+          "2025-12-12",
+          10
+        );
         console.log(t3);
 
         console.log("[6-s] Debug mode enabled: ");
-
-      };
+      }
       //Alert.Success("Data loaded successfully!");
-      $("#Toggle-DarkMode").prop('checked', Dict.darkmode);
+      $("#Toggle-DarkMode").prop("checked", Dict.darkmode);
       $("html").toggleClass("dark", Dict.darkmode);
 
       resolve(Dict);
@@ -71,9 +120,10 @@ function getData() {
   });
 }
 
-
 function RefreshAll() {
-  RefreshAllCalendar();
+  if ($(document).attr("title") == "Calendar") {
+    RefreshAllCalendar();
+  }
 
   $.when(getData()).done(function (data) {
     Dict = data;
@@ -103,7 +153,6 @@ $(document).ready(function () {
   }
   init();
 
-
   /* Main Display rule
 
         |_MainScreen
@@ -118,7 +167,6 @@ $(document).ready(function () {
 
   */
 
-
   //################################################### Fuctions #########################################################
 
   //================================================================\\
@@ -126,17 +174,17 @@ $(document).ready(function () {
   //================================================================\\
 
   function convertToDateFormat(input) {
-    if (!input || typeof input !== 'string') {
+    if (!input || typeof input !== "string") {
       console.error("Invalid input. Please provide a valid string.");
       return null;
     }
 
-    let t = input.toLowerCase().replace(" ", "");; // format
+    let t = input.toLowerCase().replace(" ", ""); // format
     let ampm = t.substring(t.length - 2, t.length);
     let t2 = t.split(":");
     var currentDate = new Date();
 
-    if (t2[0] === 'tomorrow') {
+    if (t2[0] === "tomorrow") {
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
@@ -147,7 +195,10 @@ $(document).ready(function () {
       } else {
         console.log("AI: ", t2, t2[1]);
         // console.log(parseInt(t2[1].substring(0, t2[1].length - 2)) + 12)
-        currentDate.setHours(parseInt(t2[1].substring(0, t2[1].length - 2)) + 12, 0);
+        currentDate.setHours(
+          parseInt(t2[1].substring(0, t2[1].length - 2)) + 12,
+          0
+        );
       }
     } else {
       if (ampm === "am") {
@@ -155,7 +206,9 @@ $(document).ready(function () {
         currentDate.setHours(parseInt(t2[0].substring(0, t2[0].length - 2)));
       } else {
         // console.log(parseInt(t2[0].substring(0, t2[0].length - 2)) + 12)
-        currentDate.setHours(parseInt(t2[0].substring(0, t2[0].length - 2)) + 12);
+        currentDate.setHours(
+          parseInt(t2[0].substring(0, t2[0].length - 2)) + 12
+        );
       }
       // console.log(parseInt(t2[1]))
       currentDate.setMinutes(parseInt(t2[1]));
@@ -224,54 +277,97 @@ $(document).ready(function () {
 
     for (let idx in suggestTasksSession) {
       let dueStr = suggestTasksSession[idx].deadline;
-      $('#Chat-Section #chat-content').append(chatBox.chatSuggestTask(idx, suggestTasksSession[idx].title, suggestTasksSession[idx].description, dueStr)); // ai chat suggestion task
-      let c = $('#Chat-Section #chat-content #' + idx)
-      c.find('#Task-Tag').append(MainScreen.TagTemplate('tg' + idx, { title: suggestTasksSession[idx].tag }));
-      c.find('#Task-Group').append(MainScreen.TagTemplate('gp' + idx, { title: suggestTasksSession[idx].group }));
-      c.find('#Task-Tag').find("#tg" + idx).css({ "background-color": Utils.randHexColor() })
-      c.find('#Task-Group').find("#gp" + idx).css({ "background-color": Utils.randHexColor() })
+      $("#Chat-Section #chat-content").append(
+        chatBox.chatSuggestTask(
+          idx,
+          suggestTasksSession[idx].title,
+          suggestTasksSession[idx].description,
+          dueStr
+        )
+      ); // ai chat suggestion task
+      let c = $("#Chat-Section #chat-content #" + idx);
+      c.find("#Task-Tag").append(
+        MainScreen.TagTemplate("tg" + idx, {
+          title: suggestTasksSession[idx].tag,
+        })
+      );
+      c.find("#Task-Group").append(
+        MainScreen.TagTemplate("gp" + idx, {
+          title: suggestTasksSession[idx].group,
+        })
+      );
+      c.find("#Task-Tag")
+        .find("#tg" + idx)
+        .css({ "background-color": Utils.randHexColor() });
+      c.find("#Task-Group")
+        .find("#gp" + idx)
+        .css({ "background-color": Utils.randHexColor() });
     }
   }
 
   async function runChat() {
-    if (!chadBot.isReady) { return };
-    let input = $('#Chat-Section #chat-message').val();  // get user input
-    $('#Chat-Section #chat-message').val('');  // empty input box
+    if (!chadBot.isReady) {
+      return;
+    }
+    let input = $("#Chat-Section #chat-message").val(); // get user input
+    $("#Chat-Section #chat-message").val(""); // empty input box
 
     let id = Utils.getUuid(); // random uuid for chat message send by AI in order to add effects
 
-    $('#Chat-Section #chat-content').append(chatBox.MessageDisplay(input, 'none').send); // user chat message
+    $("#Chat-Section #chat-content").append(
+      chatBox.MessageDisplay(input, "none").send
+    ); // user chat message
 
+    $("#Chat-Section #chat-content").append(
+      chatBox.MessageDisplay("", id).reply
+    ); // ai chat message
+    let c = $("#Chat-Section #chat-content #" + id);
 
-    $('#Chat-Section #chat-content').append(chatBox.MessageDisplay('', id).reply); // ai chat message 
-    let c = $('#Chat-Section #chat-content #' + id)
+    c.find("#chat-response").empty(); // empty the chat message box
+    c.find("#chat-response").append(chatBox.waitingResponse().waiting_reply); // add waiting animation
 
-    c.find('#chat-response').empty(); // empty the chat message box
-    c.find('#chat-response').append(chatBox.waitingResponse().waiting_reply); // add waiting animation
+    $("#Chat-Section #chat-send-button").empty(); // empty the send button
+    $("#Chat-Section #chat-send-button").append(
+      chatBox.waitingResponse().wating_sendbtn
+    ); // add waiting animation
 
-    $('#Chat-Section #chat-send-button').empty(); // empty the send button
-    $('#Chat-Section #chat-send-button').append(chatBox.waitingResponse().wating_sendbtn); // add waiting animation
-
-    let text = await chadBot.chat(input, 'main'); // get response from AI, the code define if the ai is in the landing or main page
-    let procTask = text.substring(text.indexOf("[BeginTask]"), text.indexOf("[EndTask]") != -1 ? text.indexOf("[EndTask]") + 9 : text.length); //th); //
+    let text = await chadBot.chat(input, "main"); // get response from AI, the code define if the ai is in the landing or main page
+    let procTask = text.substring(
+      text.indexOf("[BeginTask]"),
+      text.indexOf("[EndTask]") != -1
+        ? text.indexOf("[EndTask]") + 9
+        : text.length
+    ); //th); //
 
     createChatTask(procTask); // create task from the chat
-    let chatText = text.substring(0, text.indexOf("[BeginTask]") != -1 ? text.indexOf("[BeginTask]") : text.length);
+    let chatText = text.substring(
+      0,
+      text.indexOf("[BeginTask]") != -1
+        ? text.indexOf("[BeginTask]")
+        : text.length
+    );
     console.log(text, chatText);
     // remove the task from the response
-    c.find('#chat-response').empty(); // empty the chat message box , remove the loading effect
-    c.find('#chat-response').append(chatBox.MessageDisplay(chatText, 'none').textcontent); // add the response from AI
+    c.find("#chat-response").empty(); // empty the chat message box , remove the loading effect
+    c.find("#chat-response").append(
+      chatBox.MessageDisplay(chatText, "none").textcontent
+    ); // add the response from AI
 
-    $('#Chat-Section #chat-send-button').empty(); // empty the send button
-    $('#Chat-Section #chat-send-button').append(chatBox.waitingResponse().sendbtn); // add the send button svg
+    $("#Chat-Section #chat-send-button").empty(); // empty the send button
+    $("#Chat-Section #chat-send-button").append(
+      chatBox.waitingResponse().sendbtn
+    ); // add the send button svg
     chadBot.isReady = true;
   }
 
-  $('#Chat-Section #chat-send-button').on('click', runChat);
-  $('#Chat-Section #clear-chat-box').on('click', () => { suggestTasks = {}; $('#Chat-Section #chat-content').empty() });
+  $("#Chat-Section #chat-send-button").on("click", runChat);
+  $("#Chat-Section #clear-chat-box").on("click", () => {
+    suggestTasks = {};
+    $("#Chat-Section #chat-content").empty();
+  });
 
-  $("#chat-message").on('keydown', function (e) {
-    if (e.key === 'Enter' || e.keyCode === 13) {
+  $("#chat-message").on("keydown", function (e) {
+    if (e.key === "Enter" || e.keyCode === 13) {
       runChat();
     }
   });
@@ -279,19 +375,18 @@ $(document).ready(function () {
   // e.keyCode is deprecated (left here for for legacy browsers support)
 
   let isOpenChat = false;
-  $('#NavBar #ChatBox-Toggle').on('click', () => {
-    $('#Main-Screen').toggleClass("hidden xl:inline-block", !isOpenChat);
-    $('#Chat-Section').toggleClass("hidden", isOpenChat);
+  $("#NavBar #ChatBox-Toggle").on("click", () => {
+    $("#Main-Screen").toggleClass("hidden xl:inline-block", !isOpenChat);
+    $("#Chat-Section").toggleClass("hidden", isOpenChat);
     isOpenChat = !isOpenChat;
   });
 
-
-  $('#Chat-Section #chat-content').on('click', '.suggest-task-accept', (e) => {
-    let task_id = $(e.currentTarget).attr('id');
+  $("#Chat-Section #chat-content").on("click", ".suggest-task-accept", (e) => {
+    let task_id = $(e.currentTarget).attr("id");
     let task_info = suggestTasks[task_id];
     if (task_info == null) return;
     modalMainScreen.AddEditTask(task_info, null, true);
-  })
+  });
 
   //================================================================\\
   //=========================== Avatar Menu ========================\\
@@ -301,11 +396,15 @@ $(document).ready(function () {
     $("#Avatar-Menu-Click").toggleClass("bg-primary-200");
   });
 
-  $("#PMenu-DarkMode").find("#Toggle-DarkMode").click(function () {
-    $.when(ajaxHandler.updateDarkmode($("#Toggle-DarkMode").prop('checked'))).done(function () {
-      $("html").toggleClass("dark", ajaxHandler.getDarkmode().dark_mode)
+  $("#PMenu-DarkMode")
+    .find("#Toggle-DarkMode")
+    .click(function () {
+      $.when(
+        ajaxHandler.updateDarkmode($("#Toggle-DarkMode").prop("checked"))
+      ).done(function () {
+        $("html").toggleClass("dark", ajaxHandler.getDarkmode().dark_mode);
+      });
     });
-  });
 
   //================================================================\\
   //=========================== Mode Menu ==========================\\
@@ -322,7 +421,7 @@ $(document).ready(function () {
 
   $("#Main-Menu-Click").click(function () {
     $("#Main-Menu").toggleClass("h-[86vh]");
-    $("#Main-Menu-Click").toggleClass("-rotate-90")
+    $("#Main-Menu-Click").toggleClass("-rotate-90");
   });
 
   updateMMenuTabIndicator();
@@ -335,7 +434,7 @@ $(document).ready(function () {
   /// Add tag
   $("#MMenu-Group-Section").on("click", ".MMenu-Tag-Add", function () {
     modalMainScreen.LoadGroups(Dict);
-    let gid = $(this).parent().parent().closest('.MMenu-Group').attr('id');
+    let gid = $(this).parent().parent().closest(".MMenu-Group").attr("id");
     modalMainScreen.AddEditTag(null, Dict.groups[gid]);
   });
 
@@ -350,18 +449,15 @@ $(document).ready(function () {
   /// Edit Tag
   $("#MMenu-Group-Section").on("click", ".MMenu-Tag-Edit", function () {
     console.log($(this).closest(".MMenu-Tag").attr("id"));
-    var tid = $(this).closest(".MMenu-Tag").attr("id")
+    var tid = $(this).closest(".MMenu-Tag").attr("id");
     var tagInfo = Dict.tags[tid];
     if (tagInfo.editable == false) return;
     modalMainScreen.AddEditTag(tagInfo);
   });
 
-
-
   $("#MMenu-Group-Section").on("click", ".MMenu-Toggle-Hidden", function () {
     toggleHiddenMMenuGroup($(this).parent().parent());
   });
-
 
   //================================================================\\
   //========================== Main Screen =========================\\
@@ -369,20 +465,43 @@ $(document).ready(function () {
 
   function clockTick() {
     const now = new Date();
-    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const monthsOfYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const daysOfWeek = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const monthsOfYear = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
 
     const dayOfWeek = daysOfWeek[now.getDay()];
-    const day = now.getDate().toString().padStart(2, '0');
-    const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-indexed, so we add 1
+    const day = now.getDate().toString().padStart(2, "0");
+    const month = (now.getMonth() + 1).toString().padStart(2, "0"); // Month is zero-indexed, so we add 1
     const year = now.getFullYear();
-    const seconds = now.getSeconds().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
     let hours = now.getHours();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12 || 12; // Convert to 12-hour format
-    const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}, ${dayOfWeek}, ${monthsOfYear[month - 1]} ${day}, ${year}`;
-    document.getElementById('clock').textContent = formattedTime;
+    const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}, ${dayOfWeek}, ${
+      monthsOfYear[month - 1]
+    } ${day}, ${year}`;
+    document.getElementById("clock").textContent = formattedTime;
   }
   clockTick();
   setInterval(clockTick, 1000);
@@ -402,7 +521,9 @@ $(document).ready(function () {
     console.log("Cancelled: " + taskId);
     //console.log(Dict.tasks);
 
-    task_.toggleClass("transform transition-all duration-350 delay-75 ease-in-out scale-0 blur-md translate-y-20");
+    task_.toggleClass(
+      "transform transition-all duration-350 delay-75 ease-in-out scale-0 blur-md translate-y-20"
+    );
 
     setTimeout(() => {
       task_.remove();
@@ -421,32 +542,33 @@ $(document).ready(function () {
     Dict.tasks[taskId].isCompleted = true;
 
     // Also send to backend at /todo/completed/<id>
-    $.when(ajaxHandler.completeTask(taskId)).done(() => {
-      Alert.Success("Task completed!");
-      RefreshAll();
-    }).fail(() => {
-      Alert.Danger("Error!");
-    });
+    $.when(ajaxHandler.completeTask(taskId))
+      .done(() => {
+        Alert.Success("Task completed!");
+        RefreshAll();
+      })
+      .fail(() => {
+        Alert.Danger("Error!");
+      });
 
-    task_.toggleClass(" transform transition-all duration-350 delay-500 ease-in-out scale-150 blur-xl -translate-y-20");
+    task_.toggleClass(
+      " transform transition-all duration-350 delay-500 ease-in-out scale-150 blur-xl -translate-y-20"
+    );
     setTimeout(() => {
       task_.remove();
     }, 800);
   });
 
-
-
-  $("#crud-modal").on('change', '#groups', function () {
+  $("#crud-modal").on("change", "#groups", function () {
     modalMainScreen.LoadTags(Dict, $(this).val());
   });
-
 
   //================================================================\\
   //========================= CRUD modal ===========================\\
   //================================================================\\
 
   // Create a new Task
-  $('#Main-Screen').on("click", ".Group-Task-Add", function (e) {
+  $("#Main-Screen").on("click", ".Group-Task-Add", function (e) {
     e.preventDefault();
     var gid = $(this).closest(".group-outer").attr("id");
     modalMainScreen.LoadGroups(Dict);
@@ -456,15 +578,17 @@ $(document).ready(function () {
     e.stopPropagation();
   });
 
-  // My work at U in CRUD modal // Edit task  /// NULL -change the activate condition to prevent conflict with cancel button 
-  $('#Main-Screen').on("click", ".Task-Edit", function (e) {
+  // My work at U in CRUD modal // Edit task  /// NULL -change the activate condition to prevent conflict with cancel button
+  $("#Main-Screen").on("click", ".Task-Edit", function (e) {
     e.preventDefault();
     modalMainScreen.LoadGroups(Dict);
     modalMainScreen.LoadTags(Dict);
-    modalMainScreen.AddEditTask(Dict.tasks[$(this).closest(".task-outer").attr("id")]);
+    modalMainScreen.AddEditTask(
+      Dict.tasks[$(this).closest(".task-outer").attr("id")]
+    );
 
     e.stopPropagation();
-  })
+  });
 
   // My work at adding limitation on typing Create - Edit modal
   $("#crud-modal").on("input", "#name, #description", function () {
@@ -475,26 +599,33 @@ $(document).ready(function () {
     // If length > 0, show this length and limitation at the same place in label
     if (input_length > 0) {
       // Update length and limit
-      $(this).prev().text(function (e, text) {
-        let label_content = text.split(" ");
-        // Remove old length and limit (element that starts with "(" and ends with ")")
-        label_content = label_content.filter(e => !e.startsWith("(") && !e.endsWith(")"));
-        // Join new length and limit
-        label_content.push(`(${input_length}/${input_limit})`);
-        return label_content.join(" ");
-      })
-    }
-    else {
+      $(this)
+        .prev()
+        .text(function (e, text) {
+          let label_content = text.split(" ");
+          // Remove old length and limit (element that starts with "(" and ends with ")")
+          label_content = label_content.filter(
+            (e) => !e.startsWith("(") && !e.endsWith(")")
+          );
+          // Join new length and limit
+          label_content.push(`(${input_length}/${input_limit})`);
+          return label_content.join(" ");
+        });
+    } else {
       // Update length and limit
-      $(this).prev().text(function (e, text) {
-        let label_content = text.split(" ");
-        // Remove old length and limit (element that starts with "(" and ends with ")")
-        label_content = label_content.filter(e => !e.startsWith("(") && !e.endsWith(")"));
-        // Join just title
-        return label_content.join(" ");
-      })
+      $(this)
+        .prev()
+        .text(function (e, text) {
+          let label_content = text.split(" ");
+          // Remove old length and limit (element that starts with "(" and ends with ")")
+          label_content = label_content.filter(
+            (e) => !e.startsWith("(") && !e.endsWith(")")
+          );
+          // Join just title
+          return label_content.join(" ");
+        });
     }
-  })
+  });
   // And also checking for expired date
   $("#crud-modal").on("input", "#todo-expired", function () {
     // Get current date
@@ -504,14 +635,13 @@ $(document).ready(function () {
     // If input date is less than current date, show alert
     if (input_date < current_date) {
       $(this).css("border", "2px solid red");
-    }
-    else {
+    } else {
       $(this).css("border", "2px solid green");
     }
-  })
+  });
 
   // Submit button
-  $('#crud-modal #submit-sec').on("click", function (e) {
+  $("#crud-modal #submit-sec").on("click", function (e) {
     e.preventDefault();
     // Get id from honeypot, if id is empty string, it means it's a new task
     let submitValues = modalMainScreen.getSubmitValues();
@@ -523,78 +653,175 @@ $(document).ready(function () {
     let expired = submitValues["expired"];
     let color = submitValues["color"];
     let mode = submitValues["mode"];
-    if (expired == null || expired == 0 || expired == "") expired = Date.now() - 100;
+    if (expired == null || expired == 0 || expired == "")
+      expired = Date.now() - 100;
     console.log(mode, id, title, desc, tag, expired, color);
     // Before updatind Dict, check if tag is empty
     if (mode == "task") {
       if (id == "none") {
-        if (new Date(expired).getTime() - Date.now() <= 0) { Alert.Danger("Cannot set due time in the past!"); return; }
+        if (new Date(expired).getTime() - Date.now() <= 0) {
+          Alert.Danger("Cannot set due time in the past!");
+          return;
+        }
         // Adding a new task to the tasks object within Dict
         let t = Dict.createTask(title, desc, tag, expired, 4);
         // Call ajaxHandler. at /todo/create with JSON data
-        $.when(ajaxHandler.createTask(t.taskID, t.title, t.description, t.tag, t.deadline, t.points, t.isCompleted)).done(() => { RefreshAll(); Alert.Success("Task added successfully"); });
-      }
-      else {
+        $.when(
+          ajaxHandler.createTask(
+            t.taskID,
+            t.title,
+            t.description,
+            t.tag,
+            t.deadline,
+            t.points,
+            t.isCompleted
+          )
+        ).done(() => {
+          RefreshAll();
+          Alert.Success("Task added successfully");
+        });
+      } else {
         // Update Dict
         let t_old = Dict.tasks[id];
-        if (new Date(expired).getTime() - Date.now() <= 0) { Alert.Danger("Cannot set due time in the past!"); return; }
-        let t_new = Dict.createTask(title, desc, tag, expired, 4, id, t_old.isCompleted);
+        if (new Date(expired).getTime() - Date.now() <= 0) {
+          Alert.Danger("Cannot set due time in the past!");
+          return;
+        }
+        let t_new = Dict.createTask(
+          title,
+          desc,
+          tag,
+          expired,
+          4,
+          id,
+          t_old.isCompleted
+        );
         Dict.updateTask(t_new.taskID, t_new);
         // Call ajaxHandler. at /todo/create with JSON data
-        $.when(ajaxHandler.updateTask(t_new.taskID, t_new.title, t_new.description, t_new.tag, t_new.deadline, t_new.points, t_new.isCompleted)).done(() => { RefreshAll(); Alert.Success("Task updated successfully"); });
+        $.when(
+          ajaxHandler.updateTask(
+            t_new.taskID,
+            t_new.title,
+            t_new.description,
+            t_new.tag,
+            t_new.deadline,
+            t_new.points,
+            t_new.isCompleted
+          )
+        ).done(() => {
+          RefreshAll();
+          Alert.Success("Task updated successfully");
+        });
       }
     }
-
 
     if (mode == "group") {
-      if (id == "none") {  /// Create a new group
+      if (id == "none") {
+        /// Create a new group
         let g = Dict.createGroup(title, [], null, color, "", null);
-        let dft = Dict.tags[g.def_tag]
+        let dft = Dict.tags[g.def_tag];
         console.log(dft);
         $("#MMenu-Group-Section").append(MainMenu.GroupTemplates(g.groupID, g));
-        /// Main Screen Add 
-        renderGroupMainScreen($("#Main-Formatter").find("#Wrapper"), g, currentMode);
-        $.when(
-          ajaxHandler.addGroup(g.groupID, g.title, g.color, g.def_tag)).done( // add Group
+        /// Main Screen Add
+        renderGroupMainScreen(
+          $("#Main-Formatter").find("#Wrapper"),
+          g,
+          currentMode
+        );
+        $.when(ajaxHandler.addGroup(g.groupID, g.title, g.color, g.def_tag))
+          .done(
+            // add Group
             ajaxHandler.addTag(dft.tagID, dft.groupId, dft.title, dft.color) // add def_tag
-          ).done(() => { RefreshAll(); Alert.Success("Group added successfully"); });
-      }
-      else { // Edit groups
+          )
+          .done(() => {
+            RefreshAll();
+            Alert.Success("Group added successfully");
+          });
+      } else {
+        // Edit groups
         let g_old = Dict.groups[id];
-        let g_new = Dict.createGroup(title, g_old.tags, g_old.def_tag, color, "", id);
+        let g_new = Dict.createGroup(
+          title,
+          g_old.tags,
+          g_old.def_tag,
+          color,
+          "",
+          id
+        );
         Dict.updateGroup(g_new.groupID, g_new);
-        $("#MMenu-Group-Section").find("#" + g_new.groupID).find("#MMenu-Group-Title").text(g_new.title);
-        $.when(ajaxHandler.updateGroup(g_new.groupID, g_new.title, g_new.color, g_new.def_tag)).done(() => { RefreshAll(); Alert.Success("Group updated successfully"); });
+        $("#MMenu-Group-Section")
+          .find("#" + g_new.groupID)
+          .find("#MMenu-Group-Title")
+          .text(g_new.title);
+        $.when(
+          ajaxHandler.updateGroup(
+            g_new.groupID,
+            g_new.title,
+            g_new.color,
+            g_new.def_tag
+          )
+        ).done(() => {
+          RefreshAll();
+          Alert.Success("Group updated successfully");
+        });
       }
     }
 
-
     if (mode == "tag") {
-      if (id == "none") {  /// Create a new tags
+      if (id == "none") {
+        /// Create a new tags
         let t = Dict.createTag(title, color, groupId, true, true, true);
         Dict.groups[groupId].tags.push(t.tagID);
-        addNewTagMainMenu($("#" + groupId).find("#MMenu-Tag-Section"), t.tagID, t);
-        $.when(ajaxHandler.addTag(t.tagID, t.groupId, t.title, t.color)).done(() => { RefreshAll(); Alert.Success("Tag added successfully"); });
-      }
-      else { //Edit tags     
+        addNewTagMainMenu(
+          $("#" + groupId).find("#MMenu-Tag-Section"),
+          t.tagID,
+          t
+        );
+        $.when(ajaxHandler.addTag(t.tagID, t.groupId, t.title, t.color)).done(
+          () => {
+            RefreshAll();
+            Alert.Success("Tag added successfully");
+          }
+        );
+      } else {
+        //Edit tags
         let t_old = Dict.tags[id];
-        let t_new = Dict.createTag(title, color, groupId, t_old.deletable, t_old.editable, t_old.display, id);
+        let t_new = Dict.createTag(
+          title,
+          color,
+          groupId,
+          t_old.deletable,
+          t_old.editable,
+          t_old.display,
+          id
+        );
         Dict.updateTag(t_new.tagID, t_new);
-        $("#MMenu-Group-Section").find("#" + id).find("#MMenu-Tag-Title").text(t_new.title);
+        $("#MMenu-Group-Section")
+          .find("#" + id)
+          .find("#MMenu-Tag-Title")
+          .text(t_new.title);
 
-
-        $.when(ajaxHandler.updateTag(t_new.tagID, t_new.groupId, t_new.title, t_new.color)).done(() => { RefreshAll(); Alert.Success("Tag updated successfully"); });
-
+        $.when(
+          ajaxHandler.updateTag(
+            t_new.tagID,
+            t_new.groupId,
+            t_new.title,
+            t_new.color
+          )
+        ).done(() => {
+          RefreshAll();
+          Alert.Success("Tag updated successfully");
+        });
       }
     }
 
     console.log(Dict);
     //  RefreshAll();
     modalMainScreen.hide();
-  })
+  });
 
   //Delete button
-  $('#crud-modal #delete-sec').on("click", function (e) {
+  $("#crud-modal #delete-sec").on("click", function (e) {
     e.preventDefault();
 
     let submitValues = modalMainScreen.getSubmitValues();
@@ -606,21 +833,32 @@ $(document).ready(function () {
         // Deleting task
         Dict.removeTask(id);
         // Call ajaxHandler. at /todo/delete with JSON data
-        $.when(ajaxHandler.deleteTask(id)).done(() => { RefreshAll(); Alert.Success("Task deleted successfully"); });
+        $.when(ajaxHandler.deleteTask(id)).done(() => {
+          RefreshAll();
+          Alert.Success("Task deleted successfully");
+        });
       }
     }
 
     if (mode == "group") {
-      if (id != "none") {  /// Delete a new group
+      if (id != "none") {
+        /// Delete a new group
         Dict.removeGroup(id);
-        $.when(ajaxHandler.deleteGroup(id)).done(() => { RefreshAll(); Alert.Success("Group deleted successfully"); });
+        $.when(ajaxHandler.deleteGroup(id)).done(() => {
+          RefreshAll();
+          Alert.Success("Group deleted successfully");
+        });
       }
     }
 
-    if (mode == "tag") {   ///  Delete a tag
+    if (mode == "tag") {
+      ///  Delete a tag
       if (id != "none") {
         Dict.removeTag(id);
-        $.when(ajaxHandler.deleteTag(id)).done(() => { RefreshAll(); Alert.Success("Tag deleted successfully"); });
+        $.when(ajaxHandler.deleteTag(id)).done(() => {
+          RefreshAll();
+          Alert.Success("Tag deleted successfully");
+        });
       }
     }
 
@@ -628,31 +866,27 @@ $(document).ready(function () {
     modalMainScreen.hide();
   });
 
-
-
-
   // Add event click for redirect calendar
   $("#MMenu-Calendar").click(function () {
     window.location.href = "/calendar";
-  })
+  });
 
   function dragMoveListener(event) {
-    var target = event.target
+    var target = event.target;
     // keep the dragged position in the data-x/data-y attributes
-    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+    var x = (parseFloat(target.getAttribute("data-x")) || 0) + event.dx;
+    var y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
 
     // translate the element
-    target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+    target.style.transform = "translate(" + x + "px, " + y + "px)";
 
     // update the posiion attributes
-    target.setAttribute('data-x', x)
-    target.setAttribute('data-y', y)
+    target.setAttribute("data-x", x);
+    target.setAttribute("data-y", y);
   }
 
-
   // target elements with the "draggable" class
-  interact('#add-draggable')
+  interact("#add-draggable")
     .draggable({
       // enable inertial throwing
       inertia: true,
@@ -661,8 +895,8 @@ $(document).ready(function () {
         interact.modifiers.restrict({
           restriction: "#Main-Screen",
           elementRect: { top: 0, left: 0, bottom: 0.1, right: 0.1 },
-          endOnly: true
-        })
+          endOnly: true,
+        }),
       ],
       // disable autoScroll
       autoScroll: false,
@@ -670,24 +904,24 @@ $(document).ready(function () {
       listeners: {
         // call this function on every dragmove event
         move: dragMoveListener,
-      }
+      },
     })
-    .on('tap', function (event) {
+    .on("tap", function (event) {
       event.preventDefault();
       modalMainScreen.AddEditTask();
-    })
+    });
 
   //$("#Calendar").load("calendar.html");
 
   // Secret place: Search algorithm: Use fuzzy search
-  $('#MMenu-Search textarea').on('input', function () {
+  $("#MMenu-Search textarea").on("input", function () {
     let search = $(this).val();
     if (search.length == 0) {
       for (let task in Dict.tasks) {
         $(`#${task}`).show();
       }
       return;
-    };
+    }
     // Populate Dict into list of strings
     let searchList = [];
     for (let task in Dict.tasks) {
@@ -696,7 +930,17 @@ $(document).ready(function () {
       let groupId = Dict.tags[tagId].groupId;
       // Replace -, T, : with space on deadline
       let deadline = Dict.tasks[task].deadline.replace(/[-T:]/g, " ");
-      searchList.push(Dict.tasks[task].title + " " + Dict.tasks[task].description + " " + Dict.tags[tagId].title + " " + Dict.groups[groupId].title + " " + deadline);
+      searchList.push(
+        Dict.tasks[task].title +
+          " " +
+          Dict.tasks[task].description +
+          " " +
+          Dict.tags[tagId].title +
+          " " +
+          Dict.groups[groupId].title +
+          " " +
+          deadline
+      );
       // Init fuzzy search
       let uf = new uFuzzy({});
       let idxs = uf.filter(searchList, search);
@@ -712,4 +956,4 @@ $(document).ready(function () {
     }
   });
   // End of app.js
-})
+});

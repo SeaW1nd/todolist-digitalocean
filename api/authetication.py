@@ -14,7 +14,7 @@ import uuid
 
 # auth config
 auth = Blueprint('auth', __name__, static_folder='../static/', template_folder='../templates/')
-policy = PasswordPolicy.from_names(strength=0.67)
+policy = PasswordPolicy.from_names(strength=0.3)
 key = pyotp.random_base32()
 totp = pyotp.TOTP(key,digits=10,interval=600)
 
@@ -99,7 +99,7 @@ def register():
         elif user_password != user_retype_password:
             flash("Password and retype password are not the same")
             return redirect(url_for('auth.register'))
-        elif strength_pass < 0.67:
+        elif strength_pass < 0.3:
             flash("Password is not strong enough")
             return redirect(url_for('auth.register'))
         else:
@@ -149,7 +149,7 @@ def reset_password(token):
         if new_password != retype_password:
             flash("Password and retype password are not the same")
             return redirect(url_for("auth.reset_password",token=token))
-        elif policy.password(new_password).strength() < 0.67:
+        elif policy.password(new_password).strength() < 0.3:
             flash("Password is not strong enough")
             return redirect(url_for("auth.reset_password",token=token))
         else:
