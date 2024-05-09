@@ -17,14 +17,14 @@ def treePage_init():
 @login_required
 def loadTree():
     curr_user = Users.query.filter_by(user_id=current_user.get_id()).first()
+    if curr_user.points is None:
+        curr_user.points = 0
+        tododb.session.commit()
     tree = Trees.query.filter_by(user_id=curr_user.user_id).first()
     if tree is None:
         new_tree = Trees(user_id=curr_user.user_id, tree_id = uuid.uuid4().hex, treeStage=0, treeCount=0, wateringsLeft=0, fertilizationsLeft=0, autoOption=False, audioOption=True)
         tododb.session.add(new_tree)
         tododb.session.commit()
-        if curr_user.points is None:
-            curr_user.points = 0
-            tododb.session.commit()
         json_tree = {
             'tree_id': new_tree.tree_id,
             'treeStage': new_tree.treeStage,
@@ -34,15 +34,12 @@ def loadTree():
             'autoOption': new_tree.autoOption,
             'audioOption': new_tree.audioOption,
             'coins': curr_user.points,
-            'numberOfBirdHaveEliminated': curr_user.numberOfBirdHaveEliminated,
-            'numberOfWaterUsed': curr_user.numberOfWaterUsed,
-            'numberOfFertilizerUsed': curr_user.numberOfFertilizerUsed
+            'numberOfBirdHaveEliminated': new_tree.numberOfBirdHaveEliminated,
+            'numberOfWaterUsed': new_tree.numberOfWaterUsed,
+            'numberOfFertilizerUsed': new_tree.numberOfFertilizerUsed
         }
         return jsonify(json_tree), 200
     else:
-        if curr_user.points is None:
-            curr_user.points = 0
-            tododb.session.commit()
         json_tree = {
             'tree_id': tree.tree_id,
             'treeStage': tree.treeStage,

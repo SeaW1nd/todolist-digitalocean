@@ -18,8 +18,9 @@ const options = {
 if (window.innerWidth < 768) {
   options.backdrop = 'static';
 }
+// Create a new instance of Modal
 const modalteampage = new Modal($targetEl2, options);
-
+// reset modal 
 modalteampage.resetState = function () {
   $('#crud-modal2 h3').text("Create");
   $('#crud-modal2 h3').show();
@@ -36,7 +37,7 @@ modalteampage.resetState = function () {
   $('#crud-modal2 #description').attr("placeholder", "Team Description");
   $('#crud-modal2 #desc-sec').show();
 }
-
+//  modal for create team
 modalteampage.CreateTeam = function () {
   let h3 = "Create Team";
   let teamname = "";
