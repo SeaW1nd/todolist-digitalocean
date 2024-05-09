@@ -236,12 +236,12 @@ function sendData() {
 function RefreshAll() {
   $.when(loadData()).done((data) => {
     treeStage = data["treeStage"];
-    numberOfTreePlanted = data["numberOfTreePlanted"];
     wateringsLeft = data["wateringsLeft"];
     fertilizationsLeft = data["fertilizationsLeft"];
     autoOption = data["autoOption"];
     audioOption = data["audioOption"];
     coins = data["coins"];
+    numberOfTreePlanted = data["numberOfTreePlanted"];
     numberOfBirdHaveEliminated = data["numberOfBirdHaveEliminated"];
     numberOfWaterUsed = data["numberOfWaterUsed"];
     numberOfFertilizerUsed = data["numberOfFertilizerUsed"];
