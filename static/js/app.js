@@ -306,7 +306,7 @@ $(document).ready(function () {
   }
 
   async function runChat() {
-    if (!chadBot.isReady) {
+    if (!chadBot.isReady || $("#Chat-Section #chat-message").val() == "") {
       return;
     }
     let input = $("#Chat-Section #chat-message").val(); // get user input
@@ -429,6 +429,13 @@ $(document).ready(function () {
   //Add group
   $("#MMenu-Group-Add").click(function () {
     modalMainScreen.AddEditGroup();
+  });
+
+  $("#MMenu-Group-Section").on("click", ".MMenu-Group", function () {
+    var id = $(this).attr("id"); // Get the ID of the clicked element
+    $("html, body").animate({
+      scrollTop: $("#Main-Screen #" + id)[0].offset().top // Scroll to the top position of the element with the corresponding ID
+  }, 800); // Adjust the duration for smooth scrolling
   });
 
   /// Add tag

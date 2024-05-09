@@ -5,7 +5,7 @@ import { chatBox } from './hmtlComponent.js';
 $(document).ready(function () {
 
     async function run() {
-      if(!chadBot.isReady){ return };
+      if(!chadBot.isReady || $('#chat-message').val() == ""){ return };
         let input = $('#chat-message').val();  // get user input
         $('#chat-message').val('');  // empty input box
 

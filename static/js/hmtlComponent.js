@@ -75,9 +75,9 @@ MainScreen.TaskTemplate = function (id, task, mode = 0) {
                 </div>
             </div>
 
-            <div class="p-2 flex items-center h-fit">
+            <div class="p-2 flex items-center h-fit w-full">
 
-                <p class="h-full w-full text-left p-2 font-base truncate lg:text-xl dark:text-main">` +
+                <p class="h-full w-full text-left p-2 font-base truncate lg:text-lg dark:text-main">` +
             task.description +
             `</p>
 
