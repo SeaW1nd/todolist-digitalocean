@@ -207,7 +207,9 @@ def authorize():
         session['user'] = Users.query.filter_by(external_id=user['sub']).first().user_id
         session['type'] = 'google'
         session['token'] = token
-        login_user(Users.query.filter_by(external_id=user['sub']).first())
+        get_user = Users.query.filter_by(external_id=user['sub']).first()
+        print(get_user)
+        login_user(get_user)
         return redirect(url_for('todo.main_page'))
 
     
