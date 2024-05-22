@@ -75,9 +75,11 @@ MainScreen.TaskTemplate = function (id, task, mode = 0) {
                 </div>
             </div>
 
+
             <div class="p-2 flex items-center h-fit w-full">
 
                 <p class="h-full w-full text-left p-2 font-base truncate lg:text-lg dark:text-main">` +
+
             task.description +
             `</p>
 
@@ -145,6 +147,11 @@ MainScreen.GroupTemplate = function (id, group, mode = 0) {
         <div id="Task-Section-Outer" class= "bg-white/80 dark:bg-gray-500 transition-all duration-300 ease-in-out border-t-8 pt-4 p-2 overflow-hidden shadow-xl hover:shadow-2xl rounded-b-xl rounded-t-lg">
             <div id="Task-Section" class="relative px-2 pb-9 flex flex-col gap-3 overflow-y-auto overflow-x-hidden rounded-xl w-72 h-72 lg:w-96 lg:h-96">
             <!--task here-->
+            <div id="Empty-Task">
+                <div id="" class="text-lg lg:text-xl text-gray-600 dark:text-main/50 font-semibold p-4 text-center" > Seems empty here!</div>
+                <div class="text-md text-gray-800 dark:text-main font-normal p-2 text-center" >  Press "+" to add one or try our Chadbot suggestions. </div>
+            </div>
+
             </div>
         </div>
     </div>
@@ -364,6 +371,7 @@ alert.Success = function (msg) {
 
 alert.Danger = function (msg) {
     let uuid = Utils.getUuid();
+
     console.log(uuid,msg);
     return {
         html: (`
@@ -383,15 +391,19 @@ alert.Danger = function (msg) {
         </svg>
     </button>
 </div>
+
     `), uuid: uuid};
+
 };
 
 alert.Warning = function (msg) {
     let uuid = Utils.getUuid();
+
     return {
         html: (`
     <div id="`+ uuid + `"  class="flex items-center z-50 w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
     role="alert">
+
     <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-orange-500 bg-orange-100 rounded-lg dark:bg-orange-700 dark:text-orange-200">
         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z"/>
@@ -406,7 +418,9 @@ alert.Warning = function (msg) {
         </svg>
     </button>
 </div>
+
     `), uuid: uuid};
+
 };
 
 //================================================================\\
@@ -497,7 +511,7 @@ chatBox.MessageDisplay = function (message, id = Utils.getUuid()) {
                 <p class="text-xs font-normal lg:text-base text-gray-900 dark:text-main">`+ message + `</p>
             </div>
         </div>
-        <image class="w-8 h-8 rounded-full" src="../static/images/gigachad.jpg" alt="Jese image">
+        <image id="User-Avtr" class="w-8 h-8 rounded-full" src="../static/images/gigachad.jpg" alt="Jese image">
         </div>
 `)
     };

@@ -6,6 +6,7 @@ from .profile import profiles
 from .team import team
 from .calendar import calendar
 from .gameTree import game
+
 from flask_login import LoginManager
 from secrets import token_bytes
 from flask_migrate import Migrate
@@ -42,6 +43,7 @@ def create_app():
     mail.init_app(app)
 
 
+
     #Blueprints
     app.register_blueprint(auth)
     app.register_blueprint(todo)
@@ -49,6 +51,7 @@ def create_app():
     app.register_blueprint(team)
     app.register_blueprint(calendar)
     app.register_blueprint(game)
+
 
     # with app.app_context():
     #     tododb.create_all()

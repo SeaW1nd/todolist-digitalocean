@@ -149,6 +149,26 @@ function teamlist(id, name, code) {
         `);
     }
 }
+
+const noTeamJoinedCreated = function () {
+    return {
+        create: (`
+    
+    <div id="Empty-Team">
+        <div id="" class="text-lg lg:text-xl text-gray-600 dark:text-main/50 font-semibold p-4 text-center" > Seems lonely here!</div>
+        <div class="text-md text-gray-800 dark:text-main font-normal p-2 text-center" >  Try join a team with team code. </div>
+    </div>
+    `),
+        join: (`
+    
+    <div id="Empty-Team">
+        <div id="" class="text-lg lg:text-xl text-gray-600 dark:text-main/50 font-semibold p-4 text-center" > Seems lonely here!</div>
+        <div class="text-md text-gray-800 dark:text-main font-normal p-2 text-center" >  Create a team and invite your comrades via team code. </div>
+    </div>
+    `)
+
+    };
+};
 // get team join list from server
 function getJoinedTeam() {
     return new Promise(function (resolve) {
@@ -177,7 +197,9 @@ $(document).ready(function () {
     function init() {
         $("#UserList-Toggle").addClass("hidden");
         $.when(getJoinedTeam(),
-            getCreatedTeam()).done(function (joined, created) {
+            getCreatedTeam(), 
+        
+        ).done(function (joined, created) {
                 team = Object.assign({}, created, joined);
                 //  check team list is empty or not
                 if (Object.keys(team).length == 0) {
@@ -206,6 +228,9 @@ $(document).ready(function () {
 
                 }
                 team = temp;
+
+                
+
             }).then(
                 function () {
                     console.log('teamlist1 running');
@@ -244,6 +269,12 @@ $(document).ready(function () {
                 teamlistcre.append(teamlist(teamid, teamname, teamcode));
                 console.log('hi')
             }
+        }
+        if (teamlistjoi.children().length == 0) {
+            teamlistjoi.append(noTeamJoinedCreated().create);
+        }
+        if (teamlistcre.children().length == 0) {
+            teamlistcre.append(noTeamJoinedCreated().join);
         }
     }
     // dropdown menu 
@@ -323,7 +354,9 @@ $(document).ready(function () {
         $("#CreateAndJoinTeam #teamlist").hide();
         $("#CreateAndJoinTeam #teamlist2").hide();
     });
+
     // don't using not working 
+
     /*
      function t_join(){
         let searchCode = $("#code-sec #teamcode").val();
@@ -337,7 +370,9 @@ $(document).ready(function () {
         return teamId, teamname, teamdes;
     }
      */
+
     // Join teamn 
+
     $("#crud-modal2 #Join-sec").click(function () {
         let team_code = $("#code-sec #teamcode").val();
         addteam(team_code);
@@ -350,7 +385,9 @@ $(document).ready(function () {
         teamlist1();
         // location.reload();
     });
+
     // create team
+
     $("#crud-modal2 #Create-sec").click(function () {
         let teamname = $("#teamname-sec #teamname").val();
         let teamdes = $("#teamdesc-sec #teamdescription").val();
@@ -370,7 +407,9 @@ $(document).ready(function () {
         teamlist1();
         // location.reload();
     });
+
     // edit team just for create team list cause of team create's user is admin 
+
     $("#CreateAndJoinTeam #teamlist2").on("click", ".editteam", function () {
         let teamid = $(this).closest(".team_createlist").attr("id");
         console.log("ahhhha :", teamid);
@@ -383,7 +422,9 @@ $(document).ready(function () {
 
 
     });
+
     // save edit team and update to server
+
     $("#crud-modal2 #save-sec").click(function () {
         let id = $('#crud-modal2 input[type="checkbox"]').attr("id");
         console.log("Id: ", id);
@@ -401,7 +442,9 @@ $(document).ready(function () {
         teamlist1();
 
     });
+
     // delete inform in modal ( nothing else )
+
     $("#crud-modal2 #delete-sec").click(function () {
         let id = $('#crud-modal2 input[type="checkbox"]').attr("id");
         $('#teamname-sec #teamname').val("");

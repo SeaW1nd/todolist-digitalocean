@@ -442,8 +442,14 @@
                             style="border-color: #546f72;">
                             <!-- In this div, height of gid001 will dynamically change based on 100vh, 350px is height of calendar, 40px is height of title and  - remove lg:w-96, lg:text-xl-->
                             <div id="Task-Section"
+
                                 class="relative px-2 pb-9 flex flex-col gap-3 overflow-y-auto overflow-x-hidden rounded-xl min-w-[280px] min-h-72">
+
                                 <!--task here-->
+                                <div id="No-Event">
+                                    <div class="text-center text-gray-800 dark:text-white">No event. Perfect.</div>
+                                    <div class="text-center text-gray-800 dark:text-white">Click "+" to add event.</div>
+                                </div>
 
 
                                 <div id="id001"
@@ -472,6 +478,7 @@
                                             </div>
                                         </div>
                                         <!-- Task description -->
+
                                         <div class="p-2 flex items-center h-fit">
                                             <p class="h-full w-full text-left p-2 font-base truncate dark:text-white">
                                                 About making a website</p>

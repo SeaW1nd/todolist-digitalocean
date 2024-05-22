@@ -63,10 +63,12 @@ function purchaseItem() {
 		totalCost = 0;
 		updateTotalCost();
 		// Inform the user about the successful purchase
+
 		// alert('Purchase successful!');
 	} else {
 		// Inform the user about insufficient coins
 		// alert('Insufficient coins!');
+
 	}
 }
 
