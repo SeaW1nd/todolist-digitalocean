@@ -6,11 +6,11 @@ import {
   HarmCategory,
 } from "https://esm.run/@google/generative-ai";
 
-//const genAI = new GoogleGenerativeAI("AIzaSyAEaay39nTsBBTzHPnpvBe_jXmYtsPmFZc");
+const genAI = new GoogleGenerativeAI("AIzaSyAEaay39nTsBBTzHPnpvBe_jXmYtsPmFZc");
 
 // import { API_KEY } from "./config.js";
 
-const genAI = new GoogleGenerativeAI("AIzaSyAEaay39nTsBBTzHPnpvBe_jXmYtsPmFZc");
+// const genAI = new GoogleGenerativeAI(API_KEY);
 
 let chadBot = {};
 
