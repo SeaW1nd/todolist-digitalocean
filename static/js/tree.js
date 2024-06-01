@@ -9,6 +9,7 @@ let numberOfWaterUsed = 0; // Variable to store the number of water used
 let numberOfFertilizerUsed = 9999; // Variable to store the number of fertilizer used
 let numberOfBirdHaveEliminated = 0; // Variable to store the number of birds have eliminated
 
+
 // DONT STORE THIS IN THE DATABASE !!!!!!!!!!!!!!!!
 let animationInProgress = false;
 let lastAction = "water"; // Variable to store the last action (water or fertilize) default is "water"
@@ -24,6 +25,7 @@ let coinRewardForNextStageTreePlanted;
 let coinRewardForNextStageWaterUsed;
 let coinRewardForNextStageFertilizerUsed;
 let coinRewardForNextStageBirdHaveEliminated;
+
 
 var autoButtontag = document.getElementById("autoButton");
 var audioButtontag = document.getElementById("audioButton");
@@ -66,120 +68,41 @@ function updateCoinRewardAndMaxThreshold(
 function updateAllProgressBarsForAchivement(click = false) {
   // Update and assign the returned values back to variables
 
-  [coinRewardForNextStageWaterUsed, numberOfWaterUsedMax] =
-    updateCoinRewardAndMaxThreshold(
-      click,
-      coinRewardForNextStageWaterUsed,
-      numberOfWaterUsed,
-      numberOfWaterUsedMax
-    );
-  [coinRewardForNextStageBirdHaveEliminated, numberOfBirdHaveEliminatedMax] =
-    updateCoinRewardAndMaxThreshold(
-      click,
-      coinRewardForNextStageBirdHaveEliminated,
-      numberOfBirdHaveEliminated,
-      numberOfBirdHaveEliminatedMax
-    );
-  [coinRewardForNextStageTreePlanted, numberOfTreePlantedMax] =
-    updateCoinRewardAndMaxThreshold(
-      click,
-      coinRewardForNextStageTreePlanted,
-      numberOfTreePlanted,
-      numberOfTreePlantedMax
-    );
-  [coinRewardForNextStageFertilizerUsed, numberOfFertilizerUsedMax] =
-    updateCoinRewardAndMaxThreshold(
-      click,
-      coinRewardForNextStageFertilizerUsed,
-      numberOfFertilizerUsed,
-      numberOfFertilizerUsedMax
-    );
+  [coinRewardForNextStageWaterUsed, numberOfWaterUsedMax] = updateCoinRewardAndMaxThreshold(click, coinRewardForNextStageWaterUsed, numberOfWaterUsed, numberOfWaterUsedMax);
+  [coinRewardForNextStageBirdHaveEliminated, numberOfBirdHaveEliminatedMax] = updateCoinRewardAndMaxThreshold(click, coinRewardForNextStageBirdHaveEliminated, numberOfBirdHaveEliminated, numberOfBirdHaveEliminatedMax);
+  [coinRewardForNextStageTreePlanted, numberOfTreePlantedMax] = updateCoinRewardAndMaxThreshold(click, coinRewardForNextStageTreePlanted, numberOfTreePlanted, numberOfTreePlantedMax);
+  [coinRewardForNextStageFertilizerUsed, numberOfFertilizerUsedMax] = updateCoinRewardAndMaxThreshold(click, coinRewardForNextStageFertilizerUsed, numberOfFertilizerUsed, numberOfFertilizerUsedMax);
 
-  updateCoinRewardForNextStage(
-    coinRewardForNextStageTreePlanted,
-    coinRewardForNextStageWaterUsed,
-    coinRewardForNextStageFertilizerUsed,
-    coinRewardForNextStageBirdHaveEliminated
-  );
-  updateCurrentStageAndMaxStage(
-    "current-Tree-Count/currentMax-Tree-CountThreshold",
-    numberOfTreePlanted,
-    numberOfTreePlantedMax
-  );
-  updateCurrentStageAndMaxStage(
-    "current-Water-Count/currentMax-Water-CountThreshold",
-    numberOfWaterUsed,
-    numberOfWaterUsedMax
-  );
-  updateCurrentStageAndMaxStage(
-    "current-Fertilizer-Count/currentMax-Fertilizer-CountThreshold",
-    numberOfFertilizerUsed,
-    numberOfFertilizerUsedMax
-  );
-  updateCurrentStageAndMaxStage(
-    "current-Bird-Count/currentMax-Bird-CountThreshold",
-    numberOfBirdHaveEliminated,
-    numberOfBirdHaveEliminatedMax
-  );
+  updateCoinRewardForNextStage(coinRewardForNextStageTreePlanted, coinRewardForNextStageWaterUsed, coinRewardForNextStageFertilizerUsed, coinRewardForNextStageBirdHaveEliminated);
+  updateCurrentStageAndMaxStage("current-Tree-Count/currentMax-Tree-CountThreshold", numberOfTreePlanted, numberOfTreePlantedMax);
+  updateCurrentStageAndMaxStage("current-Water-Count/currentMax-Water-CountThreshold", numberOfWaterUsed, numberOfWaterUsedMax);
+  updateCurrentStageAndMaxStage("current-Fertilizer-Count/currentMax-Fertilizer-CountThreshold", numberOfFertilizerUsed, numberOfFertilizerUsedMax);
+  updateCurrentStageAndMaxStage("current-Bird-Count/currentMax-Bird-CountThreshold", numberOfBirdHaveEliminated, numberOfBirdHaveEliminatedMax);
 
   updateProgressBar("progressBar", "percentage", treeStage, 220);
-  updateProgressBar(
-    "progressBarNumberOfTree",
-    "percentageNumberOfTree",
-    numberOfTreePlanted,
-    numberOfTreePlantedMax
-  );
-  updateProgressBar(
-    "progressBarNumberOfWater",
-    "percentageNumberOfWater",
-    numberOfWaterUsed,
-    numberOfWaterUsedMax
-  );
-  updateProgressBar(
-    "progressBarNumberOfFertilizer",
-    "percentageNumberOfFertilizer",
-    numberOfFertilizerUsed,
-    numberOfFertilizerUsedMax
-  );
-  updateProgressBar(
-    "progressBarNumberOfBirdHaveEliminated",
-    "percentageNumberOfBirdHaveEliminated",
-    numberOfBirdHaveEliminated,
-    numberOfBirdHaveEliminatedMax
-  );
+  updateProgressBar("progressBarNumberOfTree", "percentageNumberOfTree", numberOfTreePlanted, numberOfTreePlantedMax);
+  updateProgressBar("progressBarNumberOfWater", "percentageNumberOfWater", numberOfWaterUsed, numberOfWaterUsedMax);
+  updateProgressBar("progressBarNumberOfFertilizer", "percentageNumberOfFertilizer", numberOfFertilizerUsed, numberOfFertilizerUsedMax);
+  updateProgressBar("progressBarNumberOfBirdHaveEliminated", "percentageNumberOfBirdHaveEliminated", numberOfBirdHaveEliminated, numberOfBirdHaveEliminatedMax);
 }
 
-function updateCoinRewardForNextStage(
-  coinRewardForNextStageTreePlanted,
-  coinRewardForNextStageWaterUsed,
-  coinRewardForNextStageFertilizerUsed,
-  coinRewardForNextStageBirdHaveEliminated
-) {
-  document.getElementById("coinRewardForNextStageTreePlanted").innerText =
-    coinRewardForNextStageTreePlanted;
-  document.getElementById("coinRewardForNextStageWaterUsed").innerText =
-    coinRewardForNextStageWaterUsed;
-  document.getElementById("coinRewardForNextStageFertilizerUsed").innerText =
-    coinRewardForNextStageFertilizerUsed;
-  document.getElementById(
-    "coinRewardForNextStageBirdHaveEliminated"
-  ).innerText = coinRewardForNextStageBirdHaveEliminated;
+function updateCoinRewardForNextStage(coinRewardForNextStageTreePlanted, coinRewardForNextStageWaterUsed, coinRewardForNextStageFertilizerUsed, coinRewardForNextStageBirdHaveEliminated) {
+  document.getElementById("coinRewardForNextStageTreePlanted").innerText = coinRewardForNextStageTreePlanted;
+  document.getElementById("coinRewardForNextStageWaterUsed").innerText = coinRewardForNextStageWaterUsed;
+  document.getElementById("coinRewardForNextStageFertilizerUsed").innerText = coinRewardForNextStageFertilizerUsed;
+  document.getElementById("coinRewardForNextStageBirdHaveEliminated").innerText = coinRewardForNextStageBirdHaveEliminated;
 }
 
-function updateCurrentStageAndMaxStage(
-  currentStageAndMaxStageID,
-  treeStage,
-  maxStage
-) {
-  const currentStageAndMaxStage = document.getElementById(
-    currentStageAndMaxStageID
-  );
+
+function updateCurrentStageAndMaxStage(currentStageAndMaxStageID, treeStage, maxStage) {
+  const currentStageAndMaxStage = document.getElementById(currentStageAndMaxStageID);
 
   currentStageAndMaxStage.innerText = `${treeStage}/${maxStage}`;
 }
 // Function to load data from the server
 function loadData() {
   return new Promise(function (resolve, reject) {
+
     fetch("/tree/get", {
       method: "GET",
       headers: {
@@ -189,6 +112,7 @@ function loadData() {
     })
       .then((response) => response.json())
       .then((data) => {
+
         // Update variables with data received from the server
         resolve(data);
 
@@ -282,13 +206,14 @@ $(document).ready(function () {
   RefreshAll();
 });
 
+
 //// Refresh fuction
 
 //document.body.addEventListener('click', sendData);
 
 function updateCoinsDisplay() {
   document.getElementById("CoinsOwnNumber").innerText = coins;
-}
+
 
 function updateAudioOption(click = false) {
   var audioButton = document.getElementById("audioButton");
@@ -317,6 +242,7 @@ function updateAudioOption(click = false) {
   }
 }
 
+
 function updateAutoOption(click = false) {
   if (click) {
     autoOption = !autoOption;
@@ -328,10 +254,12 @@ function updateAutoOption(click = false) {
   }
 }
 
+
 function startAuto() {
   // console.log(autoButtontag.src)
   autoInterval = setInterval(autoWaterAndFertilize, 500); // Call autoWaterAndFertilize every second
   autoButtontag.src = "../static/images/tree_game/AutoButtonLooping.gif";
+
 }
 
 function stopAuto() {
@@ -339,8 +267,10 @@ function stopAuto() {
   autoButtontag.src = "../static/images/tree_game/AutoButton.png";
 }
 
+
 function updateNumberofTrees() {
   document.getElementById("treeCount").innerText = `${numberOfTreePlanted}`;
+
 }
 
 function waterTree() {
@@ -370,6 +300,7 @@ function waterTree() {
   }
 }
 
+
 function fertilizeTree() {
   if (fertilizationsLeft > 0 && treeStage < 220) {
     treeStage += 2; // Increment tree stage by fertilizing
@@ -390,6 +321,7 @@ function fertilizeTree() {
     fertilizingAudio.play();
 
     sendData();
+
   }
 }
 
@@ -424,6 +356,7 @@ function updateTree(load = false) {
     document.getElementById(
       "tree"
     ).src = `../static/images/tree_game/tree${stage}.png`;
+
   }
 
   if (prevSrc !== newSrc && !animationInProgress) {
@@ -447,6 +380,7 @@ function updateTree(load = false) {
         stage - 1
       }.gif`;
 
+
       // Change tree image to the new source
       setTimeout(
         () => {
@@ -468,6 +402,7 @@ function updateTree(load = false) {
     document.getElementById("treeCount").innerText = `${numberOfTreePlanted}`; // Update tree count
     updateTree();
     sendData();
+
   }
 }
 
@@ -483,6 +418,7 @@ function animate(action) {
   animation.style.position = "absolute";
   animation.style.cursor = "pointer"; // Adding cursor pointer
   animation.style.pointerEvents = "none"; // Adding pointer events none
+
 
   // Get the position and size of the tree image
   const treeImg = document.getElementById("tree");
@@ -580,6 +516,7 @@ function autoWaterAndFertilize() {
   }
 }
 
+
 /////////////////////////////////////// End Modal for the shop items ///////////////////////////////////////
 // Set the shop modal element
 const $shopModalEl = document.getElementById("ShopModal");
@@ -631,6 +568,7 @@ centerShopModal();
 
 /////////////////////////////////////// End Modal for the shop items ///////////////////////////////////////
 
+
 /////////////////////////////////////// Start Modal for the helps ///////////////////////////////////////
 // Set the help modal element
 const $helpModalEl = document.getElementById("HelpModal");
@@ -650,6 +588,7 @@ const helpModalOptions = {
     // console.log("Help modal is shown");
     document.getElementById("helpButton").src =
       "../static/images/tree_game/HelpButtonPressed.png";
+
   },
   onToggle: () => {
     // console.log("Help modal has been toggled");
@@ -729,6 +668,7 @@ const achievementModal = new Modal(
   achievementModalOptions
 );
 
+
 // Function to handle closing the achievement modal when the close button is clicked
 document
   .getElementById("btn-close-achievement-modal")
@@ -753,3 +693,7 @@ window.addEventListener("resize", centerAchievementModal);
 
 // Call the centerAchievementModal function initially to center the modal
 centerAchievementModal();
+
+}
+
+
