@@ -44,6 +44,14 @@ var UsersList = {
   },
 }
 
+function getDarkMode1stLoad(){
+  $.when(ajaxHandler.getDarkmode()).done(function(data){
+    console.log("DM:" + data.dark_mode);
+    $("#Toggle-DarkMode").prop('checked', data.dark_mode);
+    $("html").toggleClass("dark", data.dark_mode);
+  });
+}
+getDarkMode1stLoad();
 
 function getData(team_id) {
   return new Promise(function (resolve) {
@@ -66,8 +74,7 @@ function getData(team_id) {
       console.log(Dict);
       console.log(UsersList);
       //Alert.Success("Data loaded successfully!");
-      $("#Toggle-DarkMode").prop('checked', Dict.darkmode);
-      $("html").toggleClass("dark", Dict.darkmode);
+      
 
       resolve(Dict, UsersList);
     }).fail(() => {
@@ -118,6 +125,8 @@ function RefreshAll(team_id) {
     $("#Main-Screen").empty();
     $("#MMenu-Group-Section").empty();
     $("#PMenu-Display-Coin").text("Coins: " + Dict.points);
+
+    console.log(Dict.darkmode);
 
     LoadMainMenu(Dict);
     LoadMainScreen(Dict, currentMode);
@@ -474,7 +483,7 @@ $(document).ready(function () {
         // Adding a new task to the tasks object within Dict
         let t = Dict.createTask(title, desc, tag, expired, 4);
         // Call ajaxHandler. at /todo/create with JSON data
-        $.when(ajaxHandler.team_createTask(team_id, t.taskID, t.title, t.description, t.tag, t.deadline, t.points, t.isCompleted)).done(() => { RefreshAll(team_id); Alert.Success("Task added successfully"); });
+        $.when(ajaxHandler.team_createTask(team_id, t.taskID, t.title, t.description, t.tag, t.deadline, t.points, t.isCompleted)).done(() => { RefreshAll(team_id); Alert.Success("Task added successfully"); }).fail(() => { Alert.Danger("Only team leader can create task!")});
       }
       else {
         // Update Dict
@@ -483,7 +492,7 @@ $(document).ready(function () {
         let t_new = Dict.createTask(title, desc, tag, expired, 4, id, t_old.isCompleted);
         Dict.updateTask(t_new.taskID, t_new);
         // Call ajaxHandler. at /todo/create with JSON data
-        $.when(ajaxHandler.team_updateTask(team_id, t_new.taskID, t_new.title, t_new.description, t_new.tag, t_new.deadline, t_new.points, t_new.isCompleted)).done(() => { RefreshAll(team_id); Alert.Success("Task updated successfully"); });
+        $.when(ajaxHandler.team_updateTask(team_id, t_new.taskID, t_new.title, t_new.description, t_new.tag, t_new.deadline, t_new.points, t_new.isCompleted)).done(() => { RefreshAll(team_id); Alert.Success("Task updated successfully"); }).fail(() => { Alert.Danger("Only team leader can update task!")});
       }
     }
 

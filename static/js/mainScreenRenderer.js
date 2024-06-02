@@ -56,9 +56,9 @@ function LoadMainScreen(Dict, currentMode = 0) {
                 groupId,
                 currentMode
             );
-
             //console.log(groupId);
             var task_html = $(g).find("#Task-Section");
+
             // Iterate over tasks
             for (var taskId in Dict.tasks) {
                 if (
@@ -66,6 +66,10 @@ function LoadMainScreen(Dict, currentMode = 0) {
                         group.tags.includes(Dict.tasks[taskId].tag) || group.def_tag == Dict.tasks[taskId].tag)
                         && Dict.tasks[taskId].isCompleted == false
                 ) {
+                    // check if have id = "Empty-Task" to remove
+                    if (task_html.find("#Empty-Task").length > 0) {
+                        task_html.find("#Empty-Task").remove();
+                    }
                     // Pass task details to renderTaskMainScreen
                     renderTaskMainScreen(
                         task_html,
