@@ -147,11 +147,6 @@ MainScreen.GroupTemplate = function (id, group, mode = 0) {
         <div id="Task-Section-Outer" class= "bg-white/80 dark:bg-gray-500 transition-all duration-300 ease-in-out border-t-8 pt-4 p-2 overflow-hidden shadow-xl hover:shadow-2xl rounded-b-xl rounded-t-lg">
             <div id="Task-Section" class="relative px-2 pb-9 flex flex-col gap-3 overflow-y-auto overflow-x-hidden rounded-xl w-72 h-72 lg:w-96 lg:h-96">
             <!--task here-->
-            <div id="Empty-Task">
-                <div id="" class="text-lg lg:text-xl text-gray-600 dark:text-main/50 font-semibold p-4 text-center" > Seems empty here!</div>
-                <div class="text-md text-gray-800 dark:text-main font-normal p-2 text-center" >  Press "+" to add one or try our Chadbot suggestions. </div>
-            </div>
-
             </div>
         </div>
     </div>
@@ -511,7 +506,7 @@ chatBox.MessageDisplay = function (message, id = Utils.getUuid()) {
                 <p class="text-xs font-normal lg:text-base text-gray-900 dark:text-main">`+ message + `</p>
             </div>
         </div>
-        <image id="User-Avtr" class="w-8 h-8 rounded-full" src="../static/images/gigachad.jpg" alt="Jese image">
+        <image class="w-8 h-8 rounded-full" src="../static/images/gigachad.jpg" alt="Jese image">
         </div>
 `)
     };

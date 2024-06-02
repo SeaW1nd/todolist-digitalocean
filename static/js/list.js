@@ -149,26 +149,6 @@ function teamlist(id, name, code) {
         `);
     }
 }
-
-const noTeamJoinedCreated = function () {
-    return {
-        create: (`
-    
-    <div id="Empty-Team">
-        <div id="" class="text-lg lg:text-xl text-gray-600 dark:text-main/50 font-semibold p-4 text-center" > Seems lonely here!</div>
-        <div class="text-md text-gray-800 dark:text-main font-normal p-2 text-center" >  Try join a team with team code. </div>
-    </div>
-    `),
-        join: (`
-    
-    <div id="Empty-Team">
-        <div id="" class="text-lg lg:text-xl text-gray-600 dark:text-main/50 font-semibold p-4 text-center" > Seems lonely here!</div>
-        <div class="text-md text-gray-800 dark:text-main font-normal p-2 text-center" >  Create a team and invite your comrades via team code. </div>
-    </div>
-    `)
-
-    };
-};
 // get team join list from server
 function getJoinedTeam() {
     return new Promise(function (resolve) {
@@ -197,9 +177,7 @@ $(document).ready(function () {
     function init() {
         $("#UserList-Toggle").addClass("hidden");
         $.when(getJoinedTeam(),
-            getCreatedTeam(), 
-        
-        ).done(function (joined, created) {
+            getCreatedTeam()).done(function (joined, created) {
                 team = Object.assign({}, created, joined);
                 //  check team list is empty or not
                 if (Object.keys(team).length == 0) {
@@ -228,9 +206,6 @@ $(document).ready(function () {
 
                 }
                 team = temp;
-
-                
-
             }).then(
                 function () {
                     console.log('teamlist1 running');
@@ -269,12 +244,6 @@ $(document).ready(function () {
                 teamlistcre.append(teamlist(teamid, teamname, teamcode));
                 console.log('hi')
             }
-        }
-        if (teamlistjoi.children().length == 0) {
-            teamlistjoi.append(noTeamJoinedCreated().create);
-        }
-        if (teamlistcre.children().length == 0) {
-            teamlistcre.append(noTeamJoinedCreated().join);
         }
     }
     // dropdown menu 

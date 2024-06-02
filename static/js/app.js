@@ -43,6 +43,11 @@ function getData() {
       Dict = data;
       console.log("[5] Data is loaded to app.js: ");
       console.log(Dict);
+
+      //Alert.Success("Data loaded successfully!");
+      $("#Toggle-DarkMode").prop("checked", Dict.darkmode);
+      $("html").toggleClass("dark", Dict.darkmode);
+
       resolve(Dict);
     });
   });
@@ -60,18 +65,21 @@ function RefreshAll() {
     $("#Main-Screen").empty();
     $("#MMenu-Group-Section").empty();
 
-    //Alert.Success("Data loaded successfully!");
-    $("#Toggle-DarkMode").prop('checked', Dict.darkmode);
-    $("html").toggleClass("dark", Dict.darkmode);
-    $("#PMenu-Display-Coin").text("Coins: " + Dict.points);
+      //Alert.Success("Data loaded successfully!");
+      $("#Toggle-DarkMode").prop('checked', Dict.darkmode);
+      $("html").toggleClass("dark", Dict.darkmode);
 
+      resolve(Dict);
+    });
+  };
+
+  $("#PMenu-Display-Coin").text("Coins: " + Dict.points);{
     LoadMainMenu(Dict);
     LoadMainScreen(Dict, currentMode);
 
     modalMainScreen.LoadTags(Dict);
     modalMainScreen.LoadGroups(Dict);
-  });
-};
+  };
 
 $(document).ready(function () {
   //================================================================\\
@@ -320,7 +328,228 @@ $(document).ready(function () {
   });
 
   //================================================================\\
+function RefreshAll() {
+  RefreshAllCalendar();
 
+  $.when(getData()).done(function (data) {
+    Dict = data;
+    console.log("[7] Refresh the mainscreen");
+    console.log(Dict);
+    $("#Main-Screen").empty();
+    $("#MMenu-Group-Section").empty();
+
+    $("#PMenu-Display-Coin").text("Coins: " + Dict.points);
+
+    LoadMainMenu(Dict);
+    LoadMainScreen(Dict, currentMode);
+
+    modalMainScreen.LoadTags(Dict);
+    modalMainScreen.LoadGroups(Dict);
+  });
+}
+
+$(document).ready(function () {
+  //================================================================\\
+  //========================== Initialize ==========================\\
+  //================================================================\\
+
+  function init() {
+    currentMode = 0;
+    RefreshAll();
+  }
+  init();
+
+
+  /* Main Display rule
+
+        |_MainScreen
+        |____Formatter
+        |     | id 
+        |     |_____title
+        |     |
+        |     |_____section (Task-Section , Group-Section)
+        |     |
+        |     |_____tag(Tag-Section)
+        |______Addons
+
+  */
+
+
+  //################################################### Fuctions #########################################################
+
+  //================================================================\\
+  //============================= Chat =============================\\
+  //================================================================\\
+
+  function convertToDateFormat(input) {
+    if (!input || typeof input !== 'string') {
+      console.error("Invalid input. Please provide a valid string.");
+      return null;
+    }
+
+    let t = input.toLowerCase().replace(" ", "");; // format
+    let ampm = t.substring(t.length - 2, t.length);
+    let t2 = t.split(":");
+    var currentDate = new Date();
+
+    if (t2[0] === 'tomorrow') {
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    if (t2.length <= 2) {
+      if (ampm === "am") {
+        //  console.log(parseInt(t2[1].substring(0, t2[1].length - 2)))
+        currentDate.setHours(parseInt(t2[1].substring(0, t2[1].length - 2)), 0);
+      } else {
+        console.log("AI: ", t2, t2[1]);
+        // console.log(parseInt(t2[1].substring(0, t2[1].length - 2)) + 12)
+        currentDate.setHours(parseInt(t2[1].substring(0, t2[1].length - 2)) + 12, 0);
+      }
+    } else {
+      if (ampm === "am") {
+        // console.log(parseInt(t2[0].substring(0, t2[0].length - 2)))
+        currentDate.setHours(parseInt(t2[0].substring(0, t2[0].length - 2)));
+      } else {
+        // console.log(parseInt(t2[0].substring(0, t2[0].length - 2)) + 12)
+        currentDate.setHours(parseInt(t2[0].substring(0, t2[0].length - 2)) + 12);
+      }
+      // console.log(parseInt(t2[1]))
+      currentDate.setMinutes(parseInt(t2[1]));
+    }
+
+    console.log(currentDate);
+    var formattedDate = currentDate.toISOString().substring(0, 16);
+    return formattedDate;
+  }
+
+  function createChatTask(str) {
+    // Check if the string is null or empty
+    if (str == null || str == "") return;
+    // Split the string into task segments
+    let taskSegments = str.split("[TSEPT]");
+    console.log(taskSegments);
+    // Extracting data
+
+    const taskRegex = /\[Task\] (.*?) \[\/Task\]/;
+    const dueRegex = /\[Due\] (.*?) \[\/Due\]/;
+    const groupRegex = /\[Group\] (.*?) \[\/Group\]/;
+    const tagRegex = /\[Tag\] (.*?) \[\/Tag\]/;
+    const desRegex = /\[Des\] (.*?) \[\/Des\]/;
+    let suggestTasksSession = {};
+    for (let i = 0; i < taskSegments.length; i++) {
+      const taskSegment = taskSegments[i];
+      const task = {};
+      let id = Utils.getUuid();
+      // Extract task title
+      const taskMatch = taskSegment.match(taskRegex);
+      if (taskMatch) {
+        task.title = taskMatch[1];
+      }
+
+      // Extract due date
+      const dueMatch = taskSegment.match(dueRegex);
+      if (dueMatch) {
+        task.deadline = convertToDateFormat(dueMatch[1]);
+      }
+
+      // Extract group
+      const groupMatch = taskSegment.match(groupRegex);
+      if (groupMatch) {
+        task.group = groupMatch[1];
+      }
+
+      // Extract tag
+      const tagMatch = taskSegment.match(tagRegex);
+      if (tagMatch) {
+        task.tag = tagMatch[1];
+      }
+
+      // Extract tag
+      const desMatch = taskSegment.match(desRegex);
+      if (desMatch) {
+        task.description = desMatch[1];
+      }
+      task.taskID = id;
+      if (Object.keys(task).length <= 3) continue;
+      suggestTasks[id] = task;
+      suggestTasksSession[id] = task;
+    }
+
+    // Outputting the extracted data
+    console.log(suggestTasksSession);
+
+    for (let idx in suggestTasksSession) {
+      let dueStr = suggestTasksSession[idx].deadline;
+      $('#Chat-Section #chat-content').append(chatBox.chatSuggestTask(idx, suggestTasksSession[idx].title, suggestTasksSession[idx].description, dueStr)); // ai chat suggestion task
+      let c = $('#Chat-Section #chat-content #' + idx)
+      c.find('#Task-Tag').append(MainScreen.TagTemplate('tg' + idx, { title: suggestTasksSession[idx].tag }));
+      c.find('#Task-Group').append(MainScreen.TagTemplate('gp' + idx, { title: suggestTasksSession[idx].group }));
+      c.find('#Task-Tag').find("#tg" + idx).css({ "background-color": Utils.randHexColor() })
+      c.find('#Task-Group').find("#gp" + idx).css({ "background-color": Utils.randHexColor() })
+    }
+  }
+
+  async function runChat() {
+    if (!chadBot.isReady) { return };
+    let input = $('#Chat-Section #chat-message').val();  // get user input
+    $('#Chat-Section #chat-message').val('');  // empty input box
+
+    let id = Utils.getUuid(); // random uuid for chat message send by AI in order to add effects
+
+    $('#Chat-Section #chat-content').append(chatBox.MessageDisplay(input, 'none').send); // user chat message
+
+
+    $('#Chat-Section #chat-content').append(chatBox.MessageDisplay('', id).reply); // ai chat message 
+    let c = $('#Chat-Section #chat-content #' + id)
+
+    c.find('#chat-response').empty(); // empty the chat message box
+    c.find('#chat-response').append(chatBox.waitingResponse().waiting_reply); // add waiting animation
+
+    $('#Chat-Section #chat-send-button').empty(); // empty the send button
+    $('#Chat-Section #chat-send-button').append(chatBox.waitingResponse().wating_sendbtn); // add waiting animation
+
+    let text = await chadBot.chat(input, 'main'); // get response from AI, the code define if the ai is in the landing or main page
+    let procTask = text.substring(text.indexOf("[BeginTask]"), text.indexOf("[EndTask]") != -1 ? text.indexOf("[EndTask]") + 9 : text.length); //th); //
+
+    createChatTask(procTask); // create task from the chat
+    let chatText = text.substring(0, text.indexOf("[BeginTask]") != -1 ? text.indexOf("[BeginTask]") : text.length);
+    console.log(text, chatText);
+    // remove the task from the response
+    c.find('#chat-response').empty(); // empty the chat message box , remove the loading effect
+    c.find('#chat-response').append(chatBox.MessageDisplay(chatText, 'none').textcontent); // add the response from AI
+
+    $('#Chat-Section #chat-send-button').empty(); // empty the send button
+    $('#Chat-Section #chat-send-button').append(chatBox.waitingResponse().sendbtn); // add the send button svg
+    chadBot.isReady = true;
+  }
+
+  $('#Chat-Section #chat-send-button').on('click', runChat);
+  $('#Chat-Section #clear-chat-box').on('click', () => { suggestTasks = {}; $('#Chat-Section #chat-content').empty() });
+
+  $("#chat-message").on('keydown', function (e) {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      runChat();
+    }
+  });
+  // e.key is the modern way of detecting keys
+  // e.keyCode is deprecated (left here for for legacy browsers support)
+
+  let isOpenChat = false;
+  $('#NavBar #ChatBox-Toggle').on('click', () => {
+    $('#Main-Screen').toggleClass("hidden xl:inline-block", !isOpenChat);
+    $('#Chat-Section').toggleClass("hidden", isOpenChat);
+    isOpenChat = !isOpenChat;
+  });
+
+
+  $('#Chat-Section #chat-content').on('click', '.suggest-task-accept', (e) => {
+    let task_id = $(e.currentTarget).attr('id');
+    let task_info = suggestTasks[task_id];
+    if (task_info == null) return;
+    modalMainScreen.AddEditTask(task_info, null, true);
+  })
+
+  //================================================================\\
 
   //=========================== Avatar Menu ========================\\
   //================================================================\\
@@ -370,9 +599,9 @@ $(document).ready(function () {
     var id = $(this).attr("id"); // Get the ID of the clicked element
     var targetOffset = $("#Main-Screen #" + id).offset().top;
     $("#Main-Screen").animate({
-      scrollTop: targetOffset
+        scrollTop: targetOffset
     }, 'slow');
-  });
+});
 
 
   /// Add tag
@@ -508,7 +737,7 @@ $(document).ready(function () {
     e.stopPropagation();
   });
 
-  // My work at U in CRUD modal // Edit task  /// NULL -change the activate condition to prevent conflict with cancel button
+  // My work at U in CRUD modal // Edit task  /// NULL -change the activate condition to prevent conflict with cancel button 
   $('#Main-Screen').on("click", ".Task-Edit", function (e) {
     e.preventDefault();
     modalMainScreen.LoadGroups(Dict);
@@ -612,7 +841,7 @@ $(document).ready(function () {
         let dft = Dict.tags[g.def_tag]
         console.log(dft);
         $("#MMenu-Group-Section").append(MainMenu.GroupTemplates(g.groupID, g));
-        /// Main Screen Add
+        /// Main Screen Add 
         renderGroupMainScreen($("#Main-Formatter").find("#Wrapper"), g, currentMode);
         $.when(
           ajaxHandler.addGroup(g.groupID, g.title, g.color, g.def_tag)).done( // add Group
@@ -636,7 +865,7 @@ $(document).ready(function () {
         addNewTagMainMenu($("#" + groupId).find("#MMenu-Tag-Section"), t.tagID, t);
         $.when(ajaxHandler.addTag(t.tagID, t.groupId, t.title, t.color)).done(() => { RefreshAll(); Alert.Success("Tag added successfully"); });
       }
-      else { //Edit tags
+      else { //Edit tags     
         let t_old = Dict.tags[id];
         let t_new = Dict.createTag(title, color, groupId, t_old.deletable, t_old.editable, t_old.display, id);
         Dict.updateTag(t_new.tagID, t_new);
@@ -784,4 +1013,6 @@ $(document).ready(function () {
     }
   });
   // End of app.js
+
+})
 });

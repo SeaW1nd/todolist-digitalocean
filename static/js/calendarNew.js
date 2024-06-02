@@ -177,18 +177,6 @@ let monthDict = {
     "November": 11,
     "December": 12,
 };
-
-const noEventHtml = function () {
-    return (`
-    <div id="Empty-Task">
-        <div id="" class="text-lg lg:text-xl text-gray-600 dark:text-main/50 font-semibold p-4 text-center" > Seems empty here!</div>
-        <div class="text-md text-gray-800 dark:text-main font-normal p-2 text-center" >  Press "+" to add one or try our Chadbot suggestions. </div>
-    </div>
-
-    `);
-}
-
-
 // Function to combine day, month, year to format: March 7th, 2024
 const combineMonth = function (day, month, year) {
     // Add st, nd, rd, th to day
@@ -341,11 +329,6 @@ const appendTask = function (Dict, day, month, year) {
     // $(".Task-Edit").hide();
     // $("#Task-Cancel").hide();
     // $("#Task-Destroyer").hide();
-
-    // If no task, show no event
-    if ($("#Task-Section").children().length == 0) {
-        $("#Task-Section").append(noEventHtml());
-    }
 }
 
 // Function to map datepicker to table
@@ -457,7 +440,7 @@ Sample bottom tooltip:
 const tooltipTemplate = function (taskId, task) {
     const date = new Date(task.deadline);
     const localDate = date.toLocaleString();
-
+    
     return (`
     <button data-tooltip-target="tooltip-bottom-${taskId}" data-tooltip-placement="bottom" type="button" class="truncate text-left mb-2 md:mb-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-full">${task.title}</button>
     <div id="tooltip-bottom-${taskId}" role="tooltip" class="max-w-[50vw] absolute z-50 inline-block invisible px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
